@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum EstadoCivil {
+  SOLTEIRO
+  NAMORANDO_NOIVO
+  CASADO_UNIAO_ESTAVEL
+  DIVORCIADO_SEPARADO
+  VIUVO
+}
+
+enum TempoUniao {
+  ATE_5_ANOS
+  MAIS_DE_5_ANOS
+}
+
+enum FaixaEtaria {
+  DE_0_A_3
+  DE_4_A_5
+  DE_6_A_7
+  DE_8_A_10
+  DE_11_A_13
+  DE_14_A_16
+  MAIS_DE_16
+}
+
+enum MomentoEmocional {
+  PILOTO_AUTOMATICO
+  FASE_DIFICIL
+  BEM_BUSCANDO_CRESCER
+  PREFIRO_NAO_RESPONDER
+}
+
+enum StatusDiagnostico {
+  PENDENTE
+  GERADO
+  ENVIADO
+  FALHOU
+}
+
+enum TipoOferta {
+  PROGRAMA
+  CONTEUDO_GENERICO
+  APOIO_PROFISSIONAL
+}
+
+model Lead {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  // P1-P10 — ver docs/quiz-perguntas.md para o enunciado completo de cada pergunta
+  estadoCivil          EstadoCivil
+  temFilhos            Boolean
+  tempoUniao           TempoUniao?
+  idadesFilhos         FaixaEtaria[]
+  faixaMaisDesafiadora FaixaEtaria?
+  prioridade           String
+  maiorDesafio         String
+  momentoEmocional     MomentoEmocional
+  relatoLivre          String?
+  cidade               String?
+  comoConheceu         String?
+
+  nome                String
+  whatsapp            String?
+  email               String
+  consentimentoLgpdEm DateTime
+
+  diagnostico Diagnostico?
+}
+
+model Diagnostico {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  leadId String @unique
+  lead   Lead   @relation(fields: [leadId], references: [id])
+
+  // decididos por regra determinística (lib/decision-tree.ts), nunca pela IA
+  fase                String
+  programaRecomendado String?
+  tabelaUsada         String?
+
+  status     StatusDiagnostico @default(PENDENTE)
+  tentativas Int               @default(0)
+  erro       String?
+
+  // output da IA validado contra o schema da seção 4.4 do doc de spec
+  conteudoJson Json?
+  tipoOferta   TipoOferta?
+
+  enviadoEm DateTime?
+}

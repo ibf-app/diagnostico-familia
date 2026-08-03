@@ -1,0 +1,4 @@
+{
+  "_comentario": "PLACEHOLDER — lista curada ainda não populada (aguardando indicação da Letícia). A IA só pode escolher títulos desta lista, nunca sugerir livremente (seção 4.2, item 3, do doc de spec). Formato de cada item: titulo, tipo (livro|filme), fases (array de nomes de fase retornados por decidirFaseEPrograma, ou 'qualquer'), desafios (array de strings livres pra casar com maiorDesafio, ou 'qualquer'), porque (motivo em 1 frase).",
+  "itens": []
+}
