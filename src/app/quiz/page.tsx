@@ -94,7 +94,7 @@ export default function QuizPage() {
       <div className={styles.card}>
         <div className={styles.header}>
           {/* eslint-disable-next-line @next/next/no-img-element -- logo estático simples, sem otimização de imagem necessária */}
-          <img src="/ibf-logo.png" alt="IBF" className={styles.logo} />
+          <img src="/logo_ibf.webp" alt="IBF" className={styles.logo} />
           <div className={styles.headerTitulo}>Família em Foco</div>
         </div>
 

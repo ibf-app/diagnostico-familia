@@ -4,8 +4,12 @@ import { renderEmailDiagnostico } from "@/lib/email-template";
 
 const brevo = new BrevoClient({ apiKey: process.env.BREVO_API_KEY ?? "" });
 
-// TODO: confirmar remetente/domínio verificado na conta Brevo antes de produção.
-const REMETENTE = { email: "diagnostico@portalibf.org.br", name: "IBF · Instituto Brasileiro da Família" };
+// Precisa ser um remetente verificado na conta Brevo (Settings > Senders), senão o
+// envio falha. TODO: trocar pra um e-mail @portalibf.org.br assim que verificado.
+const REMETENTE = {
+  email: process.env.BREVO_SENDER_EMAIL ?? "send@edudebarros.com.br",
+  name: "IBF · Instituto Brasileiro da Família",
+};
 
 export async function enviarEmailDiagnostico(params: {
   nome: string;
