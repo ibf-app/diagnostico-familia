@@ -92,6 +92,12 @@ export default function QuizPage() {
   return (
     <div className={styles.page}>
       <div className={styles.card}>
+        <div className={styles.header}>
+          {/* eslint-disable-next-line @next/next/no-img-element -- logo estático simples, sem otimização de imagem necessária */}
+          <img src="/ibf-logo.png" alt="IBF" className={styles.logo} />
+          <div className={styles.headerTitulo}>Família em Foco</div>
+        </div>
+
         {!concluido && (
           <div className={styles.progressTrack}>
             <div className={styles.progressFill} style={{ width: `${Math.max(4, progresso)}%` }} />
@@ -415,6 +421,24 @@ function CampoTexto({ pergunta, tipo, maxLength, valorInicial, onContinuar, onVo
   );
 }
 
+const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function formatarTelefone(valor: string): string {
+  const digitos = valor.replace(/\D/g, "").slice(0, 11);
+  if (digitos.length === 0) return "";
+  const ddd = digitos.slice(0, 2);
+  const resto = digitos.slice(2);
+  if (digitos.length <= 2) return `(${ddd}`;
+  if (digitos.length <= 6) return `(${ddd}) ${resto}`;
+  if (digitos.length <= 10) return `(${ddd}) ${resto.slice(0, 4)}-${resto.slice(4)}`;
+  return `(${ddd}) ${resto.slice(0, 5)}-${resto.slice(5)}`;
+}
+
+function telefoneValido(valor: string): boolean {
+  const digitos = valor.replace(/\D/g, "");
+  return digitos.length === 0 || digitos.length === 10 || digitos.length === 11;
+}
+
 interface FormularioFinalProps {
   onEnviar: (campos: Pick<Respostas, "nome" | "whatsapp" | "email">) => void;
   onVoltar?: () => void;
@@ -427,8 +451,14 @@ function FormularioFinal({ onEnviar, onVoltar, enviando, erro }: FormularioFinal
   const [whatsapp, setWhatsapp] = useState("");
   const [email, setEmail] = useState("");
   const [consentimento, setConsentimento] = useState(false);
+  const [emailTocado, setEmailTocado] = useState(false);
+  const [whatsappTocado, setWhatsappTocado] = useState(false);
 
-  const podeEnviar = nome.trim().length > 0 && email.trim().length > 0 && consentimento && !enviando;
+  const emailEhValido = REGEX_EMAIL.test(email.trim());
+  const whatsappEhValido = telefoneValido(whatsapp);
+
+  const podeEnviar =
+    nome.trim().length > 0 && emailEhValido && whatsappEhValido && consentimento && !enviando;
 
   return (
     <div>
@@ -437,19 +467,29 @@ function FormularioFinal({ onEnviar, onVoltar, enviando, erro }: FormularioFinal
       {erro && <div className={styles.errorText}>{erro}</div>}
 
       <input className={styles.textInput} placeholder="Nome" value={nome} onChange={(e) => setNome(e.target.value)} />
+
       <input
         className={styles.textInput}
         placeholder="WhatsApp (opcional)"
+        inputMode="tel"
         value={whatsapp}
-        onChange={(e) => setWhatsapp(e.target.value)}
+        onChange={(e) => setWhatsapp(formatarTelefone(e.target.value))}
+        onBlur={() => setWhatsappTocado(true)}
       />
+      {whatsappTocado && !whatsappEhValido && (
+        <div className={styles.errorText}>Confere o número — parece faltar ou sobrar dígito.</div>
+      )}
+
       <input
         className={styles.textInput}
         placeholder="E-mail"
         type="email"
+        inputMode="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        onBlur={() => setEmailTocado(true)}
       />
+      {emailTocado && !emailEhValido && <div className={styles.errorText}>Digite um e-mail válido.</div>}
 
       <label className={styles.checkboxRow}>
         <input type="checkbox" checked={consentimento} onChange={(e) => setConsentimento(e.target.checked)} />

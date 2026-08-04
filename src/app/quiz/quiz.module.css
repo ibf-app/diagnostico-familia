@@ -12,8 +12,30 @@
   max-width: 560px;
   background: #ffffff;
   border: 1px solid #d8d5ca;
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 32px;
+  box-shadow: 0 4px 24px rgba(26, 43, 76, 0.06);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #efece3;
+}
+
+.logo {
+  height: 32px;
+  width: auto;
+}
+
+.headerTitulo {
+  font-size: 15px;
+  font-weight: bold;
+  color: #1a2b4c;
+  letter-spacing: 0.2px;
 }
 
 .progressTrack {

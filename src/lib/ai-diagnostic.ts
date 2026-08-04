@@ -1,3 +1,4 @@
+import { z } from "zod";
 import Anthropic from "@anthropic-ai/sdk";
 import {
   filtrarLivrosEFilmes,
@@ -13,6 +14,12 @@ import type { ResultadoDecisao, RespostasQuiz } from "@/types/quiz";
 const MODELO = "claude-sonnet-5";
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+// Gerado a partir do próprio schema de validação — a API garante que a resposta
+// já vem nesse formato (structured outputs), então não dependemos só da IA "obedecer"
+// a instrução do prompt pra produzir JSON válido.
+const FORMATO_SAIDA_JSON_SCHEMA: Record<string, unknown> = z.toJSONSchema(diagnosticoIaSchema);
+delete FORMATO_SAIDA_JSON_SCHEMA.$schema;
 
 const SYSTEM_PROMPT = `Você escreve o conteúdo de um e-mail de diagnóstico gratuito do IBF
 (Instituto Brasileiro da Família), a partir das respostas de um quiz. Regras fixas
@@ -32,8 +39,7 @@ const SYSTEM_PROMPT = `Você escreve o conteúdo de um e-mail de diagnóstico gr
    Você só escreve o conteúdo em cima disso.
 7. Se a seção "REGRA DE SEGURANÇA ACIONADA" estiver presente no prompt, o e-mail
    NUNCA menciona, oferece ou insinua qualquer programa do IBF — mesmo que exista
-   um programa recomendado no input. O bloco final é só apoio profissional.
-8. Responda APENAS com um JSON válido no formato especificado, sem texto fora do JSON.`;
+   um programa recomendado no input. O bloco final é só apoio profissional.`;
 
 interface InputDiagnostico {
   respostas: RespostasQuiz;
@@ -88,27 +94,6 @@ function montarPrompt({ respostas, decisao, sinalDeAlertaEmocional }: InputDiagn
     `## Lista curada de livros/filmes (escolha só daqui; se vazia, use null nos dois campos)\n${JSON.stringify(livrosEFilmes, null, 2)}`
   );
 
-  partes.push(
-    `## Formato de saída esperado (JSON)\n\`\`\`json\n${JSON.stringify(
-      {
-        assunto_email: "string",
-        abertura_personalizada: "string (1-2 frases citando a resposta da pessoa)",
-        fase_titulo: "string (ecoa fase_atribuida)",
-        insights: ["string", "string", "string"],
-        acoes_praticas: ["string", "string", "string"],
-        recomendacao_livro: "{ titulo: string, porque: string } | null",
-        recomendacao_filme: "{ titulo: string, porque: string } | null",
-        oferta: {
-          tipo: "programa | conteudo_generico | apoio_profissional",
-          programa_primario: "string | null",
-          texto: "string",
-        },
-      },
-      null,
-      2
-    )}\n\`\`\``
-  );
-
   return partes.join("\n\n");
 }
 
@@ -118,14 +103,31 @@ export async function gerarDiagnosticoComIa(input: InputDiagnostico): Promise<Di
     max_tokens: 2048,
     system: SYSTEM_PROMPT,
     messages: [{ role: "user", content: montarPrompt(input) }],
+    output_config: {
+      format: {
+        type: "json_schema",
+        schema: FORMATO_SAIDA_JSON_SCHEMA,
+      },
+    },
   });
 
   const textBlock = message.content.find((block) => block.type === "text");
   if (!textBlock || textBlock.type !== "text") {
-    throw new Error("Resposta da IA não contém bloco de texto");
+    throw new Error(
+      `Resposta da IA não contém bloco de texto (stop_reason: ${message.stop_reason}, blocks: ${message.content
+        .map((b) => b.type)
+        .join(", ")})`
+    );
   }
 
-  const json = JSON.parse(textBlock.text);
+  let json: unknown;
+  try {
+    json = JSON.parse(textBlock.text);
+  } catch (err) {
+    console.error("Falha ao fazer parse do JSON retornado pela IA. Texto bruto:", textBlock.text);
+    throw new Error(`Resposta da IA não é um JSON válido: ${err instanceof Error ? err.message : String(err)}`);
+  }
+
   const diagnostico = diagnosticoIaSchema.parse(json);
 
   // Trava de segurança no código, não só no prompt: mesmo que o modelo ignore a

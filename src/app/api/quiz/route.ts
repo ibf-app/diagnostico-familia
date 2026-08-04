@@ -101,6 +101,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ leadId: lead.id, status: "ENVIADO" }, { status: 201 });
   } catch (err) {
     const mensagem = err instanceof Error ? err.message : "Erro desconhecido ao gerar/enviar diagnóstico";
+    console.error(`[api/quiz] Falha ao gerar/enviar diagnóstico ${diagnosticoId}:`, err);
     await prisma.diagnostico.update({
       where: { id: diagnosticoId },
       data: { status: "FALHOU", erro: mensagem, tentativas: { increment: 1 } },
