@@ -35,9 +35,19 @@ npm run test:watch
 
 ## Banco de dados
 
-Schema em `prisma/schema.prisma` (modelos `Lead` e `Diagnostico`). Depois de
-configurar `DATABASE_URL` (Postgres no Railway):
+Schema em `prisma/schema.prisma` (modelos `Lead` e `Diagnostico`). A migration
+inicial já está commitada em `prisma/migrations/`, gerada offline (sem precisar
+de conexão com o banco) via:
 
 ```bash
-npx prisma migrate dev --name init
+npx prisma migrate diff --from-empty --to-schema prisma/schema.prisma --script
+```
+
+Em produção (Railway), o `startCommand` em `railway.json` roda
+`prisma migrate deploy` automaticamente antes de subir o app — não precisa
+rodar a migration manualmente lá. Em desenvolvimento local, depois de
+configurar `DATABASE_URL`:
+
+```bash
+npx prisma migrate deploy
 ```
