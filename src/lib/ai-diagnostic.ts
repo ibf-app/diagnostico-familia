@@ -10,7 +10,6 @@ import {
 import { diagnosticoIaSchema, type DiagnosticoIa } from "@/lib/ai-diagnostic-schema";
 import type { ResultadoDecisao, RespostasQuiz } from "@/types/quiz";
 
-// TODO: confirmar o model id exato disponível na conta Anthropic do projeto antes de ir pra produção.
 const MODELO = "claude-sonnet-5";
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
@@ -40,7 +39,9 @@ const SYSTEM_PROMPT = `Você escreve o conteúdo de um e-mail de diagnóstico gr
 7. Se a seção "REGRA DE SEGURANÇA ACIONADA" estiver presente no prompt, o e-mail
    NUNCA menciona, oferece ou insinua qualquer programa do IBF — mesmo que exista
    um programa recomendado no input. O bloco final é só apoio profissional.
-8. "insights" e "acoes_praticas" devem ter EXATAMENTE 3 itens cada — nem mais, nem menos.`;
+8. "insights" e "acoes_praticas" devem ter EXATAMENTE 3 itens cada — nem mais, nem menos.
+9. Evite travessão (—). Pessoas quase não usam esse sinal ao escrever; prefira frases
+   mais curtas, vírgula ou ponto. Isso vale para todos os campos de texto.`;
 
 interface InputDiagnostico {
   respostas: RespostasQuiz;
