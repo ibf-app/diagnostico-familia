@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+  body{margin:0;-webkit-font-smoothing:antialiased;text-wrap:pretty}
+  a{color:#113FA0}
+  a:hover{color:#0C2E78}
+  ::placeholder{color:#8A867A}
+</style>
+</helmet>
+<div style="min-height:100vh;background:#F4F1E9;display:flex;justify-content:center;padding:20px 12px 60px;box-sizing:border-box;font-family:-apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;color:#222222;">
+  <div style="width:100%;max-width:430px;">
+    <div style="display:flex;gap:6px;justify-content:center;margin-bottom:14px;">
+      <button style="border:none;background:#FFFFFF;color:#6B6656;font-size:11px;font-family:monospace;padding:5px 10px;border-radius:999px;cursor:pointer;border:1px solid #D8D5CA;" onClick="{{ goLanding }}">Landing</button>
+      <button style="border:none;background:#FFFFFF;color:#6B6656;font-size:11px;font-family:monospace;padding:5px 10px;border-radius:999px;cursor:pointer;border:1px solid #D8D5CA;" onClick="{{ goQuiz }}">Quiz</button>
+      <button style="border:none;background:#FFFFFF;color:#6B6656;font-size:11px;font-family:monospace;padding:5px 10px;border-radius:999px;cursor:pointer;border:1px solid #D8D5CA;" onClick="{{ goResult }}">Resultado</button>
+    </div>
+
+    <sc-if value="{{ isLanding }}" hint-placeholder-val="{{ true }}">
+    <div style="background:#FFFFFF;border-radius:20px;overflow:hidden;border:1px solid #E3E1D8;">
+      <div style="display:flex;align-items:center;gap:10px;padding:20px 20px 16px;">
+        <img src="uploads/logo_ibf.webp" alt="IBF" style="height:30px;width:auto;" />
+        <div style="font-size:13px;color:#6B6656;font-weight:600;letter-spacing:0.02em;">Família em Foco</div>
+      </div>
+      <div style="padding:6px 24px 28px;">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#8A6D1F;text-transform:uppercase;margin-bottom:10px;">IBF · Instituto Brasileiro da Família</div>
+        <div style="font-size:30px;line-height:1.15;font-weight:700;color:#113FA0;margin-bottom:14px;">Descubra em que momento sua família está agora</div>
+        <div style="font-size:16px;line-height:1.5;color:#444441;margin-bottom:22px;">Um diagnóstico gratuito e personalizado sobre sua fase familiar ou conjugal, com insights e ações práticas para essa semana.</div>
+        <button style="width:100%;background:#113FA0;color:#FFFFFF;border:none;border-radius:12px;padding:17px;font-size:17px;font-weight:700;cursor:pointer;" onClick="{{ goQuiz }}">Começar quiz</button>
+        <div style="text-align:center;font-size:13px;color:#8A867A;margin-top:10px;">Leva cerca de 2 minutos · gratuito</div>
+      </div>
+
+      <div style="background:#F4F1E9;padding:26px 24px;border-top:1px solid #E3E1D8;">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#8A6D1F;text-transform:uppercase;margin-bottom:14px;">O que você recebe</div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:26px;height:26px;flex:none;border-radius:50%;background:#113FA0;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;">1</div>
+            <div style="font-size:15px;line-height:1.4;color:#222222;">Leitura da fase atual da sua família ou relação</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:26px;height:26px;flex:none;border-radius:50%;background:#113FA0;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;">2</div>
+            <div style="font-size:15px;line-height:1.4;color:#222222;">Insights sobre o que esse momento diz sobre você</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:26px;height:26px;flex:none;border-radius:50%;background:#113FA0;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;">3</div>
+            <div style="font-size:15px;line-height:1.4;color:#222222;">Ações práticas para colocar em prática essa semana</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:26px;height:26px;flex:none;border-radius:50%;background:#113FA0;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;">4</div>
+            <div style="font-size:15px;line-height:1.4;color:#222222;">Indicação de livro ou filme, quando fizer sentido</div>
+          </div>
+        </div>
+        <div style="font-size:13px;color:#6B6656;margin-top:16px;line-height:1.5;">É um diagnóstico feito para o seu momento, não um resultado genérico de teste de personalidade.</div>
+      </div>
+
+      <div style="padding:26px 24px;">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#8A6D1F;text-transform:uppercase;margin-bottom:14px;">Como funciona</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="border:1px solid #D8D5CA;border-radius:12px;padding:14px 16px;font-size:14px;color:#444441;line-height:1.4;"><strong style="color:#222222;">1. Responda perguntas rápidas</strong><br />Cerca de 2 minutos, sobre sua fase atual.</div>
+          <div style="border:1px solid #D8D5CA;border-radius:12px;padding:14px 16px;font-size:14px;color:#444441;line-height:1.4;"><strong style="color:#222222;">2. Receba seu diagnóstico na hora</strong><br />Direto na tela, personalizado com base nas suas respostas.</div>
+          <div style="border:1px solid #D8D5CA;border-radius:12px;padding:14px 16px;font-size:14px;color:#444441;line-height:1.4;"><strong style="color:#222222;">3. Receba também por e-mail</strong><br />Para consultar quando quiser.</div>
+        </div>
+      </div>
+
+      <div style="background:#113FA0;padding:26px 24px;">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#F39200;text-transform:uppercase;margin-bottom:12px;">Metodologia IFFD</div>
+        <div style="font-size:15px;line-height:1.5;color:#FFFFFF;margin-bottom:18px;">Metodologia da IFFD (International Federation for Family Development), aplicada há décadas em 68 países.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div><div style="font-size:22px;font-weight:700;color:#FFFFFF;">68</div><div style="font-size:12px;color:#C9D6EE;">países</div></div>
+          <div><div style="font-size:22px;font-weight:700;color:#FFFFFF;">20</div><div style="font-size:12px;color:#C9D6EE;">Centros de Fortalecimento Familiar</div></div>
+          <div><div style="font-size:22px;font-weight:700;color:#FFFFFF;">+1.000</div><div style="font-size:12px;color:#C9D6EE;">colaboradores voluntários</div></div>
+          <div><div style="font-size:22px;font-weight:700;color:#FFFFFF;">+10.000</div><div style="font-size:12px;color:#C9D6EE;">pessoas impactadas</div></div>
+        </div>
+      </div>
+
+      <div style="padding:28px 24px;text-align:center;">
+        <div style="font-size:20px;font-weight:700;color:#222222;margin-bottom:14px;">Pronto para ver com clareza o momento da sua família?</div>
+        <button style="width:100%;background:#F39200;color:#FFFFFF;border:none;border-radius:12px;padding:17px;font-size:17px;font-weight:700;cursor:pointer;" onClick="{{ goQuiz }}">Começar quiz agora</button>
+      </div>
+
+      <div style="border-top:1px solid #E3E1D8;padding:20px 24px;text-align:center;">
+        <img src="uploads/logo_ibf.webp" alt="IBF" style="height:22px;width:auto;margin-bottom:10px;" />
+        <div style="font-size:12px;color:#8A867A;line-height:1.5;">IBF — Instituto Brasileiro da Família<br /><a href="https://portalibf.org.br/politica-de-privacidade" style="font-size:12px;">Política de privacidade</a></div>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isQuiz }}" hint-placeholder-val="{{ false }}">
+    <div style="background:#FFFFFF;border-radius:20px;overflow:hidden;border:1px solid #E3E1D8;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:20px 20px 14px;">
+        <img src="uploads/logo_ibf.webp" alt="IBF" style="height:34px;width:auto;" />
+        <div style="font-size:13px;color:#6B6656;font-weight:600;">Família em Foco</div>
+      </div>
+
+      <div style="padding:0 20px 6px;">
+        <div style="height:8px;background:#EDEBE4;border-radius:999px;overflow:hidden;">
+          <div style="height:100%;background:#F39200;border-radius:999px;width:{{ progressPct }}%;transition:width 0.3s ease;"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:8px;">
+          <div style="font-size:12px;color:#6B6656;">{{ progressLabel }}</div>
+          <sc-if value="{{ showAlmost }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:#8A6D1F;font-weight:700;">Quase lá!</div></sc-if>
+        </div>
+      </div>
+
+      <div style="padding:20px 20px 24px;min-height:280px;">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#8A6D1F;text-transform:uppercase;margin-bottom:10px;">{{ step.eyebrow }}</div>
+        <div style="font-size:21px;line-height:1.3;font-weight:700;color:#222222;margin-bottom:6px;">{{ step.question }}</div>
+        <sc-if value="{{ step.hint }}" hint-placeholder-val="{{ false }}"><div style="font-size:13px;color:#8A867A;margin-bottom:16px;">{{ step.hint }}</div></sc-if>
+
+        <sc-if value="{{ step.isSingle }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px;">
+            <sc-for list="{{ options }}" as="opt" hint-placeholder-count="4">
+              <button style="{{ opt.style }}" onClick="{{ opt.onClick }}">{{ opt.label }}</button>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ step.isMulti }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;">
+            <sc-for list="{{ options }}" as="opt" hint-placeholder-count="5">
+              <button style="{{ opt.style }}" onClick="{{ opt.onClick }}">{{ opt.label }}</button>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ step.isShortText }}" hint-placeholder-val="{{ false }}">
+          <input type="text" placeholder="Opcional" value="{{ textVal }}" onChange="{{ onTextChange }}" style="width:100%;box-sizing:border-box;border:1.5px solid #D8D5CA;border-radius:12px;padding:14px 16px;font-size:16px;color:#222222;margin-top:14px;" />
+        </sc-if>
+
+        <sc-if value="{{ step.isLongText }}" hint-placeholder-val="{{ false }}">
+          <textarea placeholder="Escreva aqui, se quiser (opcional)" value="{{ textVal }}" onChange="{{ onTextChange }}" maxlength="280" style="width:100%;box-sizing:border-box;border:1.5px solid #D8D5CA;border-radius:12px;padding:14px 16px;font-size:15px;color:#222222;margin-top:14px;min-height:110px;resize:none;font-family:inherit;"></textarea>
+          <div style="text-align:right;font-size:12px;color:#8A867A;margin-top:4px;">{{ charCount }}/280</div>
+        </sc-if>
+
+        <sc-if value="{{ step.isForm }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:14px;margin-top:14px;">
+            <div>
+              <input type="text" placeholder="Seu nome" value="{{ formName }}" onChange="{{ onFormNameChange }}" style="width:100%;box-sizing:border-box;border:1.5px solid {{ nameBorder }};border-radius:12px;padding:14px 16px;font-size:16px;color:#222222;" />
+              <sc-if value="{{ formErrors.name }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:#B3261E;margin-top:5px;">{{ formErrors.name }}</div></sc-if>
+            </div>
+            <div>
+              <input type="text" placeholder="WhatsApp (opcional)" value="{{ formWhatsapp }}" onChange="{{ onFormWhatsappChange }}" style="width:100%;box-sizing:border-box;border:1.5px solid {{ waBorder }};border-radius:12px;padding:14px 16px;font-size:16px;color:#222222;" />
+              <sc-if value="{{ formErrors.whatsapp }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:#B3261E;margin-top:5px;">{{ formErrors.whatsapp }}</div></sc-if>
+            </div>
+            <div>
+              <input type="email" placeholder="Seu e-mail" value="{{ formEmail }}" onChange="{{ onFormEmailChange }}" style="width:100%;box-sizing:border-box;border:1.5px solid {{ emailBorder }};border-radius:12px;padding:14px 16px;font-size:16px;color:#222222;" />
+              <sc-if value="{{ formErrors.email }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:#B3261E;margin-top:5px;">{{ formErrors.email }}</div></sc-if>
+            </div>
+            <label style="display:flex;gap:10px;align-items:flex-start;cursor:pointer;">
+              <input type="checkbox" checked="{{ formConsent }}" onChange="{{ onFormConsentToggle }}" style="margin-top:3px;width:17px;height:17px;flex:none;accent-color:#113FA0;" />
+              <span style="font-size:12.5px;line-height:1.5;color:#6B6656;">Concordo em receber meu diagnóstico e outras comunicações do IBF por e-mail e WhatsApp, de acordo com a <a href="https://portalibf.org.br/politica-de-privacidade">política de privacidade</a>. <em>(texto provisório, sujeito a validação jurídica)</em></span>
+            </label>
+            <sc-if value="{{ formErrors.consent }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:#B3261E;">{{ formErrors.consent }}</div></sc-if>
+            <button style="width:100%;background:#113FA0;color:#FFFFFF;border:none;border-radius:12px;padding:17px;font-size:16px;font-weight:700;cursor:pointer;margin-top:4px;" onClick="{{ onSubmitForm }}">Receber meu diagnóstico</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ stepError }}" hint-placeholder-val="{{ false }}"><div style="font-size:13px;color:#B3261E;margin-top:14px;">{{ stepError }}</div></sc-if>
+      </div>
+
+      <sc-if value="{{ showFooterNav }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 20px 20px;border-top:1px solid #E3E1D8;">
+        <button style="border:none;background:none;color:#6B6656;font-size:14px;cursor:pointer;padding:8px 0;" onClick="{{ back }}">Voltar</button>
+        <div style="display:flex;gap:10px;">
+          <sc-if value="{{ showSkip }}" hint-placeholder-val="{{ false }}"><button style="border:1.5px solid #D8D5CA;background:#FFFFFF;color:#6B6656;font-size:14px;font-weight:600;border-radius:10px;padding:12px 16px;cursor:pointer;" onClick="{{ skipStep }}">Pular</button></sc-if>
+          <button style="border:none;background:#113FA0;color:#FFFFFF;font-size:14px;font-weight:700;border-radius:10px;padding:12px 22px;cursor:pointer;" onClick="{{ next }}">Continuar</button>
+        </div>
+      </div>
+      </sc-if>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isResult }}" hint-placeholder-val="{{ false }}">
+    <div style="background:#FFFFFF;border-radius:20px;overflow:hidden;border:1px solid #E3E1D8;">
+      <div style="display:flex;align-items:center;gap:10px;padding:18px 20px 14px;">
+        <img src="uploads/logo_ibf.webp" alt="IBF" style="height:26px;width:auto;" />
+        <div style="font-size:13px;color:#6B6656;font-weight:600;">Seu diagnóstico</div>
+      </div>
+
+      <div style="padding:4px 20px 20px;">
+        <div style="font-size:16px;line-height:1.55;color:#222222;">{{ aberturaText }}</div>
+      </div>
+
+      <div style="margin:0 20px 20px;background:#F4F1E9;border-radius:14px;padding:20px;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;color:#8A6D1F;text-transform:uppercase;margin-bottom:8px;">Seu momento</div>
+        <div style="font-size:22px;font-weight:700;color:#113FA0;line-height:1.25;">{{ faseTitulo }}</div>
+      </div>
+
+      <div style="margin:0 20px 22px;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;color:#8A6D1F;text-transform:uppercase;margin-bottom:12px;">O que os dados dizem sobre essa fase</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <sc-for list="{{ insights }}" as="item" hint-placeholder-count="3">
+            <div style="border:1px solid #E3E1D8;border-radius:12px;padding:14px 16px;font-size:14.5px;line-height:1.5;color:#444441;">{{ item }}</div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="margin:0 20px 22px;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;color:#8A6D1F;text-transform:uppercase;margin-bottom:12px;">Ações para essa semana</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <sc-for list="{{ acoes }}" as="item" hint-placeholder-count="3">
+            <div style="display:flex;gap:10px;align-items:flex-start;border:1px solid #E3E1D8;border-radius:12px;padding:14px 16px;">
+              <div style="width:20px;height:20px;flex:none;border-radius:50%;background:#639922;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;margin-top:1px;">✓</div>
+              <div style="font-size:14.5px;line-height:1.5;color:#444441;">{{ item }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <sc-if value="{{ showBookMovie }}" hint-placeholder-val="{{ false }}">
+      <div style="margin:0 20px 22px;background:#F4F1E9;border-radius:14px;padding:18px 20px;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;color:#8A6D1F;text-transform:uppercase;margin-bottom:10px;">Para aprofundar essa semana</div>
+        <div style="font-size:14.5px;color:#222222;line-height:1.5;margin-bottom:4px;"><strong>Livro:</strong> {{ livroTitulo }}</div>
+        <div style="font-size:14.5px;color:#222222;line-height:1.5;"><strong>Filme:</strong> {{ filmeTitulo }}</div>
+      </div>
+      </sc-if>
+
+      <div style="margin:0 20px 22px;border-left:3px solid #F39200;padding:4px 0 4px 14px;">
+        <div style="font-size:14px;font-style:italic;color:#444441;line-height:1.55;">{{ quoteText }}</div>
+      </div>
+
+      <div style="margin:0 20px 20px;background:#113FA0;border-radius:14px;padding:22px 20px;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;color:#F39200;text-transform:uppercase;margin-bottom:10px;">{{ ofertaEyebrow }}</div>
+        <div style="font-size:15px;color:#FFFFFF;line-height:1.5;margin-bottom:{{ ofertaCtaMargin }}px;">{{ ofertaTexto }}</div>
+        <sc-if value="{{ showOfertaCta }}" hint-placeholder-val="{{ false }}">
+          <button style="border:none;background:#F39200;color:#FFFFFF;font-size:14px;font-weight:700;border-radius:10px;padding:13px 20px;cursor:pointer;width:100%;">{{ ofertaCtaLabel }}</button>
+        </sc-if>
+      </div>
+
+      <div style="margin:0 20px 24px;font-size:12.5px;color:#8A867A;line-height:1.5;">Enviamos esse mesmo diagnóstico para o seu e-mail. Não encontrou? Confira também a caixa de spam ou promoções.</div>
+
+      <div style="border-top:1px solid #E3E1D8;padding:18px 20px;display:flex;flex-direction:column;gap:8px;align-items:center;">
+        <img src="uploads/logo_ibf.webp" alt="IBF" style="height:20px;width:auto;" />
+        <button style="border:none;background:none;color:#113FA0;font-size:13px;font-weight:600;cursor:pointer;" onClick="{{ goLanding }}">Voltar para o início</button>
+        <div style="font-size:11px;color:#8A867A;">IBF — Instituto Brasileiro da Família · <a href="https://portalibf.org.br/politica-de-privacidade" style="font-size:11px;">Política de privacidade</a></div>
+      </div>
+    </div>
+    </sc-if>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:430,&quot;height&quot;:900},&quot;resultShowRecommendation&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Resultado&quot;},&quot;resultOfferType&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;programa&quot;,&quot;options&quot;:[&quot;programa&quot;,&quot;generico&quot;,&quot;apoio&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Resultado&quot;}}">
+const QUESTIONS = [
+  {id:'p1', eyebrow:'SOBRE VOCÊ', type:'single', question:'Qual frase descreve melhor sua vida hoje?', options:[
+    {value:'namorando', label:'Estou namorando ou noivo(a)', profile:'couple'},
+    {value:'casado', label:'Sou casado(a) ou moro com alguém', profile:'couple'},
+    {value:'sozinho', label:'Estou sozinho(a), sem filhos', profile:'individual'},
+    {value:'pai_mae', label:'Sou pai ou mãe', profile:'parent'}
+  ]},
+  {id:'p2', eyebrow:'SUA FAMÍLIA', type:'single', question:'Vocês têm filhos?', options:[
+    {value:'sim', label:'Sim'}, {value:'nao', label:'Não'}
+  ], condition:(s)=> s.profile==='couple'},
+  {id:'p3', eyebrow:'SUA FAMÍLIA', type:'multi', question:'Qual a idade dos seus filhos?', hint:'Selecione todas que se aplicam', options:[
+    {value:'0-3',label:'0 a 3 anos'},{value:'4-6',label:'4 a 6 anos'},{value:'7-12',label:'7 a 12 anos'},{value:'13-17',label:'13 a 17 anos'},{value:'18+',label:'18 anos ou mais'}
+  ], condition:(s)=> s.profile==='parent' || s.answers.p2==='sim'},
+  {id:'p3b', eyebrow:'SUA HISTÓRIA', type:'single', question:'Há quanto tempo vocês estão juntos?', options:[
+    {value:'menos1',label:'Menos de 1 ano'},{value:'1a5',label:'De 1 a 5 anos'},{value:'5a15',label:'De 5 a 15 anos'},{value:'mais15',label:'Mais de 15 anos'}
+  ], condition:(s)=> s.profile==='couple' && s.answers.p2==='nao'},
+  {id:'p4', eyebrow:'O MOMENTO ATUAL', type:'single', question:'Como está o clima em casa nas últimas semanas?', options:[
+    {value:'tranquilo',label:'Tranquilo, sem grandes conflitos'},{value:'tenso',label:'Tenso, com atritos frequentes'},{value:'misto',label:'Uma mistura dos dois'},{value:'incerto',label:'Não sei dizer com clareza'}
+  ]},
+  {id:'p5', eyebrow:'O MOMENTO ATUAL', type:'single', question:'O que mais pesa no seu dia a dia agora?', options:[
+    {value:'comunicacao',label:'Comunicação com quem eu amo'},{value:'tempo',label:'Falta de tempo de qualidade'},{value:'financeiro',label:'Questões financeiras'},{value:'rotina',label:'Rotina com os filhos'},{value:'solidao',label:'Sensação de solidão'}
+  ]},
+  {id:'p6', eyebrow:'PRIORIDADES', type:'multi', optional:true, question:'Quais temas você gostaria de fortalecer?', hint:'Opcional, selecione quantos quiser', options:[
+    {value:'comunicacao',label:'Comunicação'},{value:'intimidade',label:'Intimidade'},{value:'paciencia',label:'Paciência'},{value:'organizacao',label:'Organização da rotina'},{value:'proposito',label:'Propósito pessoal'}
+  ]},
+  {id:'p7', eyebrow:'SEU RELATO', type:'text', longText:true, optional:true, question:'Quer contar um pouco mais sobre esse momento?', hint:'Opcional, até 280 caracteres'},
+  {id:'p8', eyebrow:'PARA FINALIZAR', type:'text', optional:true, question:'Em qual cidade você mora?', hint:'Opcional'},
+  {id:'p9', eyebrow:'ÚLTIMA PERGUNTA', type:'single', question:'Você já buscou algum tipo de apoio para esse momento antes?', options:[
+    {value:'sim',label:'Sim, já busquei'},{value:'nao',label:'Não, seria a primeira vez'},{value:'talvez',label:'Não sei dizer'}
+  ]},
+  {id:'p10', eyebrow:'QUASE LÁ', type:'form', question:'Para onde enviamos seu diagnóstico?'}
+];
+
+function maskPhone(raw){
+  const d = raw.replace(/\D/g,'').slice(0,11);
+  if(!d.length) return '';
+  if(d.length<=2) return '('+d;
+  const rest = d.slice(2);
+  let out = '('+d.slice(0,2)+') ';
+  if(rest.length<=4) out += rest;
+  else if(rest.length<=8) out += rest.slice(0,4)+'-'+rest.slice(4);
+  else out += rest.slice(0,5)+'-'+rest.slice(5);
+  return out;
+}
+
+class Component extends DCLogic {
+  state = {
+    screen: 'landing', stepIndex: 0, profile: null,
+    answers: {}, multi: {}, texts: {},
+    error: '',
+    form: {name:'', whatsapp:'', email:'', consent:false},
+    formErrors: {}
+  };
+
+  getVisibleSteps(){ return QUESTIONS.filter(q => !q.condition || q.condition(this.state)); }
+
+  goLanding = () => this.setState({screen:'landing', stepIndex:0, profile:null, answers:{}, multi:{}, texts:{}, error:'', form:{name:'',whatsapp:'',email:'',consent:false}, formErrors:{}});
+  goQuiz = () => this.setState({screen:'quiz', stepIndex:0, error:''});
+  goResult = () => this.setState({screen:'result'});
+
+  selectOption = (stepId, value, profileVal) => this.setState(s => ({
+    answers: {...s.answers, [stepId]: value},
+    profile: profileVal || s.profile,
+    error: ''
+  }));
+
+  toggleMulti = (stepId, value) => this.setState(s => {
+    const arr = s.multi[stepId] ? [...s.multi[stepId]] : [];
+    const i = arr.indexOf(value);
+    if(i>=0) arr.splice(i,1); else arr.push(value);
+    return {multi:{...s.multi,[stepId]:arr}, error:''};
+  });
+
+  onTextChange = (e) => {
+    const visible = this.getVisibleSteps();
+    const step = visible[this.state.stepIndex];
+    if(!step) return;
+    this.setState(s => ({texts:{...s.texts,[step.id]: e.target.value}}));
+  };
+
+  next = () => {
+    const visible = this.getVisibleSteps();
+    const step = visible[this.state.stepIndex];
+    if(!step) return;
+    if(step.type==='single' && !step.optional && !this.state.answers[step.id]){
+      this.setState({error:'Selecione uma opção para continuar.'}); return;
+    }
+    if(step.type==='multi' && !step.optional && !((this.state.multi[step.id]||[]).length)){
+      this.setState({error:'Selecione ao menos uma opção.'}); return;
+    }
+    this.setState(s => ({stepIndex: s.stepIndex+1, error:''}));
+  };
+
+  skipStep = () => this.setState(s => ({stepIndex: s.stepIndex+1, error:''}));
+
+  back = () => this.setState(s => s.stepIndex>0 ? {stepIndex:s.stepIndex-1, error:''} : {screen:'landing'});
+
+  onFormNameChange = (e) => this.setState(s => ({form:{...s.form, name:e.target.value}}));
+  onFormWhatsappChange = (e) => this.setState(s => ({form:{...s.form, whatsapp: maskPhone(e.target.value)}}));
+  onFormEmailChange = (e) => this.setState(s => ({form:{...s.form, email:e.target.value}}));
+  onFormConsentToggle = () => this.setState(s => ({form:{...s.form, consent: !s.form.consent}}));
+
+  onSubmitForm = () => {
+    const f = this.state.form;
+    const errors = {};
+    if(!f.name.trim()) errors.name = 'Digite seu nome.';
+    if(!f.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email)) errors.email = 'Digite um e-mail válido.';
+    const digits = f.whatsapp.replace(/\D/g,'');
+    if(digits.length>0 && digits.length<10) errors.whatsapp = 'Telefone incompleto.';
+    if(!f.consent) errors.consent = 'Você precisa aceitar para continuar.';
+    if(Object.keys(errors).length){ this.setState({formErrors:errors}); return; }
+    this.setState({screen:'result', formErrors:{}});
+  };
+
+  buildOptions(step){
+    const s = this.state;
+    const isMulti = step.type==='multi';
+    return step.options.map(o => {
+      const selected = isMulti ? (s.multi[step.id]||[]).includes(o.value) : s.answers[step.id]===o.value;
+      const bg = selected ? (isMulti?'#F39200':'#113FA0') : '#FFFFFF';
+      const color = selected ? '#FFFFFF' : (isMulti?'#444441':'#222222');
+      const borderColor = selected ? (isMulti?'#F39200':'#113FA0') : '#D8D5CA';
+      const style = isMulti
+        ? `padding:11px 18px;border-radius:999px;border:1.5px solid ${borderColor};background:${bg};color:${color};font-size:15px;font-weight:${selected?'600':'500'};cursor:pointer;white-space:nowrap;`
+        : `width:100%;text-align:left;padding:16px 18px;border-radius:12px;border:1.5px solid ${borderColor};background:${bg};color:${color};font-size:16px;font-weight:${selected?'600':'500'};cursor:pointer;line-height:1.4;`;
+      return {value:o.value, label:o.label, style, onClick: isMulti ? () => this.toggleMulti(step.id, o.value) : () => this.selectOption(step.id, o.value, o.profile)};
+    });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const visible = this.getVisibleSteps();
+    const idx = Math.min(s.stepIndex, Math.max(visible.length-1, 0));
+    const stepDef = visible[idx] || QUESTIONS[0];
+    const isFormStep = stepDef.type==='form';
+    const position = idx+1, total = visible.length || 1;
+    const progressPct = Math.round((position/total)*100);
+    const showAlmost = !isFormStep && (total-position)<=1;
+
+    const step = {
+      eyebrow: stepDef.eyebrow, question: stepDef.question, hint: stepDef.hint||'',
+      isSingle: stepDef.type==='single', isMulti: stepDef.type==='multi',
+      isShortText: stepDef.type==='text' && !stepDef.longText,
+      isLongText: stepDef.type==='text' && !!stepDef.longText,
+      isForm: isFormStep, optional: !!stepDef.optional
+    };
+    const options = (stepDef.type==='single'||stepDef.type==='multi') ? this.buildOptions(stepDef) : [];
+    const textVal = stepDef.type==='text' ? (s.texts[stepDef.id]||'') : '';
+
+    const name = (s.form.name||'Você').trim().split(' ')[0] || 'Você';
+    const faseTitulo = s.profile==='parent' ? 'Fase de consolidação da rotina familiar'
+      : s.profile==='couple' ? 'Fase de reconexão do casal'
+      : 'Fase de construção de propósito pessoal';
+    const ofertaBase = s.profile==='couple' ? {programa:'Amor Matrimonial', texto:'Um programa do IBF para casais que querem fortalecer a comunicação e a intimidade no dia a dia.'}
+      : s.profile==='parent' ? {programa:'Primeiros Passos', texto:'Um programa do IBF para pais que querem construir uma rotina mais leve e presente com os filhos.'}
+      : {programa:'Projeto Pessoal', texto:'Um programa do IBF para quem está construindo um novo sentido de propósito e direção de vida.'};
+
+    const offerType = this.props.resultOfferType ?? 'programa';
+    let ofertaEyebrow, ofertaTexto, showOfertaCta=false, ofertaCtaLabel='', ofertaCtaMargin=0;
+    if(offerType==='programa'){
+      ofertaEyebrow = 'Programa recomendado · ' + ofertaBase.programa;
+      ofertaTexto = ofertaBase.texto;
+      showOfertaCta = true; ofertaCtaLabel = 'Conhecer o programa'; ofertaCtaMargin = 16;
+    } else if(offerType==='generico'){
+      ofertaEyebrow = 'Próximo passo';
+      ofertaTexto = 'Se esse diagnóstico fez sentido para você, o IBF tem caminhos práticos para dar o próximo passo.';
+      showOfertaCta = true; ofertaCtaLabel = 'Falar com o IBF'; ofertaCtaMargin = 16;
+    } else {
+      ofertaEyebrow = 'Um lembrete importante';
+      ofertaTexto = 'Esse pode ser um momento para buscar apoio profissional. Você não precisa passar por isso sozinho(a).';
+      showOfertaCta = false; ofertaCtaMargin = 0;
+    }
+
+    return {
+      isLanding: s.screen==='landing', isQuiz: s.screen==='quiz', isResult: s.screen==='result',
+      goLanding: this.goLanding, goQuiz: this.goQuiz, goResult: this.goResult,
+      step, options, textVal, charCount: textVal.length,
+      onTextChange: this.onTextChange,
+      progressPct, progressLabel: `Pergunta ${position} de ${total}`, showAlmost,
+      stepError: s.error, showFooterNav: !isFormStep, showSkip: !!stepDef.optional,
+      back: this.back, next: this.next, skipStep: this.skipStep,
+      formName: s.form.name, formWhatsapp: s.form.whatsapp, formEmail: s.form.email, formConsent: s.form.consent,
+      onFormNameChange: this.onFormNameChange, onFormWhatsappChange: this.onFormWhatsappChange,
+      onFormEmailChange: this.onFormEmailChange, onFormConsentToggle: this.onFormConsentToggle,
+      onSubmitForm: this.onSubmitForm, formErrors: s.formErrors,
+      nameBorder: s.formErrors.name ? '#B3261E' : '#D8D5CA',
+      waBorder: s.formErrors.whatsapp ? '#B3261E' : '#D8D5CA',
+      emailBorder: s.formErrors.email ? '#B3261E' : '#D8D5CA',
+      aberturaText: `Olá, ${name}. Pelas suas respostas, dá para ver que você está num momento de atenção, mas também de oportunidade. Pequenos passos com intenção podem fazer diferença nas próximas semanas.`,
+      faseTitulo,
+      insights: [
+        'Famílias em fases parecidas costumam sentir o peso mais na rotina do dia a dia do que em um problema único e pontual.',
+        'Pequenos momentos de atenção genuína pesam mais na percepção de proximidade do que grandes gestos esporádicos.',
+        'Nomear o que está pesando, como você fez agora, já é o primeiro passo para lidar com isso de forma mais leve.'
+      ],
+      acoes: [
+        'Reserve 15 minutos hoje para uma conversa sem celular por perto.',
+        'Escolha um horário fixo na semana só para isso, sem depender de sobrar tempo.',
+        'Anote uma coisa boa que aconteceu essa semana, por menor que seja.'
+      ],
+      showBookMovie: this.props.resultShowRecommendation ?? true,
+      livroTitulo: 'Amar é uma Decisão', filmeTitulo: 'Uma Família em Sintonia',
+      quoteText: 'A metodologia da IFFD, aplicada há décadas em 68 países, mostra que pequenas mudanças na rotina familiar têm efeito duradouro no bem-estar de toda a família.',
+      ofertaEyebrow, ofertaTexto, showOfertaCta, ofertaCtaLabel, ofertaCtaMargin
+    };
+  }
+}
+
+</script>
+</body>
+</html>
