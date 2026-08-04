@@ -101,6 +101,7 @@ export default function QuizPage() {
           <TelaConcluido />
         ) : (
           <PassoAtual
+            key={step}
             step={step}
             respostas={respostas}
             onAvancar={avancar}
