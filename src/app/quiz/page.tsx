@@ -5,6 +5,7 @@ import styles from "./quiz.module.css";
 import { proximoPasso, type StepId } from "@/lib/quiz-steps";
 import {
   COMO_CONHECEU_OPTIONS,
+  TEXTO_CONSENTIMENTO_LGPD,
   ESTADO_CIVIL_OPTIONS,
   FAIXA_ETARIA_OPTIONS,
   MOMENTO_EMOCIONAL_OPTIONS,
@@ -452,10 +453,7 @@ function FormularioFinal({ onEnviar, onVoltar, enviando, erro }: FormularioFinal
 
       <label className={styles.checkboxRow}>
         <input type="checkbox" checked={consentimento} onChange={(e) => setConsentimento(e.target.checked)} />
-        <span>
-          Concordo em receber meu diagnóstico e comunicações do IBF por e-mail, de acordo com a política de
-          privacidade.
-        </span>
+        <span>{TEXTO_CONSENTIMENTO_LGPD}</span>
       </label>
 
       <div className={styles.actions}>
