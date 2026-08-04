@@ -39,7 +39,8 @@ const SYSTEM_PROMPT = `Você escreve o conteúdo de um e-mail de diagnóstico gr
    Você só escreve o conteúdo em cima disso.
 7. Se a seção "REGRA DE SEGURANÇA ACIONADA" estiver presente no prompt, o e-mail
    NUNCA menciona, oferece ou insinua qualquer programa do IBF — mesmo que exista
-   um programa recomendado no input. O bloco final é só apoio profissional.`;
+   um programa recomendado no input. O bloco final é só apoio profissional.
+8. "insights" e "acoes_praticas" devem ter EXATAMENTE 3 itens cada — nem mais, nem menos.`;
 
 interface InputDiagnostico {
   respostas: RespostasQuiz;

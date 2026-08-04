@@ -12,8 +12,12 @@ export const diagnosticoIaSchema = z.object({
   assunto_email: z.string().min(1),
   abertura_personalizada: z.string().min(1),
   fase_titulo: z.string().min(1),
-  insights: z.array(z.string().min(1)).length(3),
-  acoes_praticas: z.array(z.string().min(1)).length(3),
+  // A API da Anthropic só aceita minItems 0 ou 1 no schema de saída estruturada
+  // (output_config) — "exatamente 3 itens" é reforçado só via instrução no
+  // prompt; o template de e-mail itera sobre o array, então funciona com
+  // qualquer tamanho caso o modelo devolva um número diferente de 3.
+  insights: z.array(z.string().min(1)).min(1),
+  acoes_praticas: z.array(z.string().min(1)).min(1),
   recomendacao_livro: z
     .object({
       titulo: z.string().min(1),
