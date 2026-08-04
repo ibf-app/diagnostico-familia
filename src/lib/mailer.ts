@@ -1,11 +1,11 @@
-import { EmailParams, MailerSend, Recipient, Sender } from "mailersend";
+import { BrevoClient } from "@getbrevo/brevo";
 import type { DiagnosticoIa } from "@/lib/ai-diagnostic-schema";
 import { renderEmailDiagnostico } from "@/lib/email-template";
 
-const mailerSend = new MailerSend({ apiKey: process.env.MAILERSEND_API_KEY ?? "" });
+const brevo = new BrevoClient({ apiKey: process.env.BREVO_API_KEY ?? "" });
 
-// TODO: confirmar domínio verificado no Mailersend antes de produção.
-const REMETENTE = new Sender("diagnostico@portalibf.org.br", "IBF · Instituto Brasileiro da Família");
+// TODO: confirmar remetente/domínio verificado na conta Brevo antes de produção.
+const REMETENTE = { email: "diagnostico@portalibf.org.br", name: "IBF · Instituto Brasileiro da Família" };
 
 export async function enviarEmailDiagnostico(params: {
   nome: string;
@@ -15,11 +15,10 @@ export async function enviarEmailDiagnostico(params: {
 }): Promise<void> {
   const html = renderEmailDiagnostico(params);
 
-  const emailParams = new EmailParams()
-    .setFrom(REMETENTE)
-    .setTo([new Recipient(params.email, params.nome)])
-    .setSubject(params.diagnostico.assunto_email)
-    .setHtml(html);
-
-  await mailerSend.email.send(emailParams);
+  await brevo.transactionalEmails.sendTransacEmail({
+    sender: REMETENTE,
+    to: [{ email: params.email, name: params.nome }],
+    subject: params.diagnostico.assunto_email,
+    htmlContent: html,
+  });
 }

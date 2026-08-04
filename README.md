@@ -5,7 +5,7 @@ um diagnóstico personalizado a partir de uma árvore de decisão determinístic
 geração de conteúdo por IA.
 
 - **Stack:** Next.js (TypeScript), Prisma + Postgres (Railway), Anthropic (Claude)
-  para o conteúdo do diagnóstico, Mailersend para envio.
+  para o conteúdo do diagnóstico, Brevo para envio.
 - **Árvore de decisão:** `src/lib/decision-tree.ts` — decide fase e programa
   recomendado de forma 100% determinística (a IA nunca decide isso, só escreve
   conteúdo em cima). Testada com os 3 casos de exemplo reais em
@@ -19,7 +19,7 @@ geração de conteúdo por IA.
 
 ```bash
 npm install
-cp .env.example .env   # preencher DATABASE_URL, ANTHROPIC_API_KEY, MAILERSEND_API_KEY
+cp .env.example .env   # preencher DATABASE_URL, ANTHROPIC_API_KEY, BREVO_API_KEY
 npx prisma generate
 npm run dev
 ```
