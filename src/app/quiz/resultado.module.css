@@ -1,0 +1,177 @@
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.logo {
+  height: 28px;
+  width: auto;
+}
+
+.headerTitulo {
+  font-size: 17px;
+  font-weight: bold;
+  color: #6b6656;
+}
+
+.saudacao {
+  font-size: 16px;
+  color: #222222;
+  line-height: 1.6;
+  margin: 0 0 12px;
+}
+
+.abertura {
+  font-size: 16px;
+  color: #222222;
+  line-height: 1.6;
+  margin: 0 0 24px;
+}
+
+.eyebrow {
+  font-size: 12px;
+  font-weight: bold;
+  color: #8a6d1f;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 12px;
+}
+
+.momentoCard {
+  background: #f4f1e9;
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin-bottom: 28px;
+}
+
+.momentoCard .eyebrow {
+  margin-bottom: 6px;
+}
+
+.faseTitulo {
+  font-size: 21px;
+  font-weight: bold;
+  color: #113fa0;
+  line-height: 1.3;
+}
+
+.section {
+  margin-bottom: 28px;
+}
+
+.insightList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.insightCard {
+  border: 1px solid #e3e1d8;
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #444441;
+}
+
+.acaoList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.acaoItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #222222;
+}
+
+.acaoCheck {
+  color: #639922;
+  font-weight: bold;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.aprofundarCard {
+  background: #f4f1e9;
+  border-radius: 14px;
+  padding: 16px 18px;
+}
+
+.aprofundarItem {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #444441;
+  margin: 0 0 8px;
+}
+
+.aprofundarItem:last-child {
+  margin-bottom: 0;
+}
+
+.credibilidade {
+  border-left: 3px solid #f39200;
+  padding: 2px 0 2px 14px;
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.6;
+  color: #444441;
+  margin-bottom: 24px;
+}
+
+/* Bloco de oferta — fundo azul sólido com CTA laranja, como no protótipo
+   aprovado (docs/telas_em_html.html). Texto fica menor que insights/ações
+   pra manter a regra 80/20 de conteúdo (insight/ação > oferta comercial). */
+.oferta {
+  background: #113fa0;
+  border-radius: 14px;
+  padding: 20px 20px;
+  margin-bottom: 24px;
+}
+
+.ofertaEyebrow {
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: #f39200;
+  margin: 0 0 10px;
+}
+
+.ofertaTexto {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #ffffff;
+  margin: 0;
+}
+
+.ofertaCta {
+  display: block;
+  margin-top: 14px;
+  text-align: center;
+  background: #f39200;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 10px;
+  padding: 12px 18px;
+  text-decoration: none;
+}
+
+.avisoEmail {
+  background: #f4f1e9;
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #8a867a;
+}

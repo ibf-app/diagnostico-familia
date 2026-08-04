@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import styles from "./quiz.module.css";
+import TelaResultado from "./TelaResultado";
 import { proximoPasso, type StepId } from "@/lib/quiz-steps";
 import {
   COMO_CONHECEU_OPTIONS,
@@ -15,6 +16,7 @@ import {
   momentoEmocionalPergunta,
   prioridadeOptions,
 } from "@/lib/quiz-options";
+import type { DiagnosticoIa } from "@/lib/ai-diagnostic-schema";
 import type { FaixaEtaria, RespostasQuiz } from "@/types/quiz";
 
 // Ordem de referência só pra estimar o progresso visual — passos condicionais
@@ -37,13 +39,44 @@ const ORDEM_PROGRESSO: StepId[] = [
 
 type Respostas = Partial<RespostasQuiz>;
 
+interface Resultado {
+  nome: string;
+  fase: string;
+  diagnostico: DiagnosticoIa;
+}
+
+/** Rótulo eyebrow (caixa alta, dourado) exibido acima da pergunta de cada passo — puramente visual. */
+function eyebrowParaStep(step: StepId): string {
+  switch (step) {
+    case "P1":
+    case "P2":
+    case "P3_TEMPO_UNIAO":
+    case "P3B_TEMPO_UNIAO":
+      return "SOBRE VOCÊ";
+    case "P3_IDADES":
+    case "P4B":
+      return "SUA FAMÍLIA";
+    case "P4":
+    case "P5":
+    case "P6":
+    case "P7":
+      return "SEU MOMENTO";
+    case "P8":
+    case "P9":
+    case "P10":
+      return "PRA FINALIZAR";
+    case "DONE":
+      return "";
+  }
+}
+
 export default function QuizPage() {
   const [step, setStep] = useState<StepId>("P1");
   const [historico, setHistorico] = useState<StepId[]>([]);
   const [respostas, setRespostas] = useState<Respostas>({});
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
-  const [concluido, setConcluido] = useState(false);
+  const [resultado, setResultado] = useState<Resultado | null>(null);
 
   function avancar(atualizacao: Respostas) {
     const novasRespostas = { ...respostas, ...atualizacao };
@@ -74,12 +107,13 @@ export default function QuizPage() {
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || data.status !== "ENVIADO" || !data.diagnostico) {
         throw new Error(data.error ?? "Não foi possível enviar o quiz agora.");
       }
 
-      setConcluido(true);
+      setResultado({ nome: camposFinais.nome ?? "", fase: data.fase, diagnostico: data.diagnostico });
     } catch (err) {
       setErro(err instanceof Error ? err.message : "Erro inesperado.");
     } finally {
@@ -87,50 +121,51 @@ export default function QuizPage() {
     }
   }
 
-  const progresso = Math.round((ORDEM_PROGRESSO.indexOf(step) / (ORDEM_PROGRESSO.length - 1)) * 100);
+  const indiceAtual = ORDEM_PROGRESSO.indexOf(step);
+  const progresso = Math.round((indiceAtual / (ORDEM_PROGRESSO.length - 1)) * 100);
+  // Indicador "Quase lá!" — mesma regra do protótipo aprovado (docs/telas_em_html.html):
+  // aparece quando falta 1 pergunta ou menos até o fim, exceto no passo de formulário final.
+  const posicaoAtual = indiceAtual + 1;
+  const totalPerguntas = ORDEM_PROGRESSO.length;
+  const mostrarQuaseLa = step !== "P10" && totalPerguntas - posicaoAtual <= 1;
 
   return (
     <div className={styles.page}>
       <div className={styles.card}>
-        <div className={styles.header}>
-          {/* eslint-disable-next-line @next/next/no-img-element -- logo estático simples, sem otimização de imagem necessária */}
-          <img src="/logo_ibf.webp" alt="IBF" className={styles.logo} />
-          <div className={styles.headerTitulo}>Família em Foco</div>
-        </div>
-
-        {!concluido && (
-          <div className={styles.progressTrack}>
-            <div className={styles.progressFill} style={{ width: `${Math.max(4, progresso)}%` }} />
-          </div>
-        )}
-
-        {concluido ? (
-          <TelaConcluido />
+        {resultado ? (
+          <TelaResultado nome={resultado.nome} fase={resultado.fase} diagnostico={resultado.diagnostico} />
         ) : (
-          <PassoAtual
-            key={step}
-            step={step}
-            respostas={respostas}
-            onAvancar={avancar}
-            onVoltar={historico.length > 0 ? voltar : undefined}
-            onEnviar={enviarQuiz}
-            enviando={enviando}
-            erro={erro}
-          />
+          <>
+            <div className={styles.header}>
+              {/* eslint-disable-next-line @next/next/no-img-element -- logo estático simples, sem otimização de imagem necessária */}
+              <img src="/logo_ibf.webp" alt="IBF" className={styles.logo} />
+              <div className={styles.headerTitulo}>Família em Foco</div>
+            </div>
+
+            <div className={styles.progressTrack}>
+              <div className={styles.progressFill} style={{ width: `${Math.max(4, progresso)}%` }} />
+            </div>
+            <div className={styles.progressLabelRow}>
+              <div className={styles.progressLabel}>
+                Pergunta {posicaoAtual} de {totalPerguntas}
+              </div>
+              {mostrarQuaseLa && <div className={styles.quaseLa}>Quase lá!</div>}
+            </div>
+            <div className={styles.eyebrow}>{eyebrowParaStep(step)}</div>
+
+            <PassoAtual
+              key={step}
+              step={step}
+              respostas={respostas}
+              onAvancar={avancar}
+              onVoltar={historico.length > 0 ? voltar : undefined}
+              onEnviar={enviarQuiz}
+              enviando={enviando}
+              erro={erro}
+            />
+          </>
         )}
       </div>
-    </div>
-  );
-}
-
-function TelaConcluido() {
-  return (
-    <div>
-      <div className={styles.resultTitle}>Recebemos suas respostas!</div>
-      <p className={styles.resultText}>
-        Seu diagnóstico personalizado está a caminho do seu e-mail. Se não encontrar em alguns minutos, dá uma
-        olhada na caixa de spam/promoções.
-      </p>
     </div>
   );
 }
