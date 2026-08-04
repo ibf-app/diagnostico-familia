@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { sinalizaAlertaEmocional } from "@/lib/safety-check";
 import { gerarDiagnosticoComIa } from "@/lib/ai-diagnostic";
 import { enviarEmailDiagnostico } from "@/lib/mailer";
+import { linkCtaGenerico, linkPrograma } from "@/lib/knowledge-base";
 import type { Diagnostico, Lead } from "@/generated/prisma/client";
 import type { DiagnosticoIa } from "@/lib/ai-diagnostic-schema";
 import type { ResultadoDecisao, RespostasQuiz, TabelaC } from "@/types/quiz";
@@ -13,8 +14,20 @@ export interface ProcessarDiagnosticoParams {
 }
 
 export type ResultadoProcessamento =
-  | { status: "ENVIADO"; diagnostico: DiagnosticoIa; fase: string }
+  | { status: "ENVIADO"; diagnostico: DiagnosticoIa; fase: string; ofertaLink: string | null }
   | { status: "FALHOU"; erro: string };
+
+/**
+ * Link do CTA da oferta. "programa" usa o link oficial do programa recomendado
+ * pela árvore de decisão (fonte da verdade, não o que a IA eventualmente citar em
+ * texto livre), "conteudo_generico" usa o link genérico do knowledge-base,
+ * "apoio_profissional" nunca tem CTA.
+ */
+function linkDaOferta(tipo: DiagnosticoIa["oferta"]["tipo"], programaRecomendado: string | null): string | null {
+  if (tipo === "programa") return linkPrograma(programaRecomendado);
+  if (tipo === "conteudo_generico") return linkCtaGenerico();
+  return null;
+}
 
 /**
  * Gera o conteúdo do diagnóstico via IA, envia o e-mail e atualiza o status do
@@ -46,11 +59,14 @@ export async function processarDiagnostico({
       },
     });
 
+    const ofertaLink = linkDaOferta(diagnosticoIa.oferta.tipo, decisao.programaRecomendado);
+
     await enviarEmailDiagnostico({
       nome: respostas.nome,
       email: respostas.email,
       fase: decisao.fase,
       diagnostico: diagnosticoIa,
+      ofertaLink,
     });
 
     await prisma.diagnostico.update({
@@ -58,7 +74,7 @@ export async function processarDiagnostico({
       data: { status: "ENVIADO", enviadoEm: new Date() },
     });
 
-    return { status: "ENVIADO", diagnostico: diagnosticoIa, fase: decisao.fase };
+    return { status: "ENVIADO", diagnostico: diagnosticoIa, fase: decisao.fase, ofertaLink };
   } catch (err) {
     const mensagem = err instanceof Error ? err.message : "Erro desconhecido ao gerar/enviar diagnóstico";
     console.error(`[processar-diagnostico] Falha ao gerar/enviar diagnóstico ${diagnosticoId}:`, err);

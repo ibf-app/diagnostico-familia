@@ -25,6 +25,26 @@ export function lerConteudoPrograma(programaRecomendado: string | null): string 
   return fs.readFileSync(path.join(KB_ROOT, "programas", `${slug}.md`), "utf-8");
 }
 
+function extrairLink(conteudoMarkdown: string, rotulo: string): string {
+  const match = conteudoMarkdown.match(new RegExp(`\\*\\*${rotulo}:\\*\\*\\s*(\\S+)`));
+  if (!match) {
+    throw new Error(`Link "${rotulo}" não encontrado no conteúdo do knowledge-base`);
+  }
+  return match[1];
+}
+
+/** Link oficial do programa específico (seção "Link oficial" do markdown), pra usar no CTA. */
+export function linkPrograma(programaRecomendado: string | null): string | null {
+  const conteudo = lerConteudoPrograma(programaRecomendado);
+  if (!conteudo) return null;
+  return extrairLink(conteudo, "Link oficial");
+}
+
+/** Link de destino do CTA genérico (seção "Link de destino" de institucional/cta-generico.md). */
+export function linkCtaGenerico(): string {
+  return extrairLink(lerCtaGenerico(), "Link de destino");
+}
+
 export function lerDadosIffd(): string {
   return fs.readFileSync(path.join(KB_ROOT, "institucional/dados-iffd.md"), "utf-8");
 }

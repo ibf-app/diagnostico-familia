@@ -43,6 +43,7 @@ interface Resultado {
   nome: string;
   fase: string;
   diagnostico: DiagnosticoIa;
+  ofertaLink: string | null;
 }
 
 /** Rótulo eyebrow (caixa alta, dourado) exibido acima da pergunta de cada passo — puramente visual. */
@@ -113,7 +114,12 @@ export default function QuizPage() {
         throw new Error(data.error ?? "Não foi possível enviar o quiz agora.");
       }
 
-      setResultado({ nome: camposFinais.nome ?? "", fase: data.fase, diagnostico: data.diagnostico });
+      setResultado({
+        nome: camposFinais.nome ?? "",
+        fase: data.fase,
+        diagnostico: data.diagnostico,
+        ofertaLink: data.ofertaLink ?? null,
+      });
     } catch (err) {
       setErro(err instanceof Error ? err.message : "Erro inesperado.");
     } finally {
@@ -133,7 +139,14 @@ export default function QuizPage() {
     <div className={styles.page}>
       <div className={styles.card}>
         {resultado ? (
-          <TelaResultado nome={resultado.nome} fase={resultado.fase} diagnostico={resultado.diagnostico} />
+          <TelaResultado
+            nome={resultado.nome}
+            fase={resultado.fase}
+            diagnostico={resultado.diagnostico}
+            ofertaLink={resultado.ofertaLink}
+          />
+        ) : enviando ? (
+          <TelaCarregando />
         ) : (
           <>
             <div className={styles.header}>
@@ -166,6 +179,19 @@ export default function QuizPage() {
           </>
         )}
       </div>
+    </div>
+  );
+}
+
+/** Exibida entre o clique em "Receber meu diagnóstico" e a resposta da API — a
+ * geração via IA + envio do e-mail leva alguns segundos, então esse feedback
+ * visual evita a sensação de tela travada. */
+function TelaCarregando() {
+  return (
+    <div className={styles.loadingWrap}>
+      <div className={styles.spinner} />
+      <div className={styles.loadingTitulo}>Estamos montando seu diagnóstico</div>
+      <div className={styles.loadingTexto}>Isso pode levar até um minuto. Não fecha essa página, tá bom?</div>
     </div>
   );
 }

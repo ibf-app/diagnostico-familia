@@ -25,8 +25,9 @@ export function renderEmailDiagnostico(params: {
   nome: string;
   fase: string;
   diagnostico: DiagnosticoIa;
+  ofertaLink: string | null;
 }): string {
-  const { nome, fase, diagnostico } = params;
+  const { nome, fase, diagnostico, ofertaLink } = params;
 
   const insightsHtml = diagnostico.insights
     .map(
@@ -58,11 +59,11 @@ export function renderEmailDiagnostico(params: {
         ? "Próximo passo"
         : "Um lembrete importante";
   const ofertaCtaLabel = diagnostico.oferta.tipo === "programa" ? "Conhecer o programa" : "Falar com o IBF";
-  const mostrarOfertaCta = diagnostico.oferta.tipo !== "apoio_profissional";
+  const mostrarOfertaCta = diagnostico.oferta.tipo !== "apoio_profissional" && Boolean(ofertaLink);
 
   const ofertaCtaHtml = mostrarOfertaCta
     ? `<tr><td style="padding-top:16px;">
-        <a href="https://www.portalibf.org.br" style="display:inline-block; background:#F39200; color:#FFFFFF; font-size:14px; font-weight:bold; border-radius:8px; padding:12px 20px; text-decoration:none;">${escapeHtml(
+        <a href="${escapeHtml(ofertaLink!)}" style="display:inline-block; background:#F39200; color:#FFFFFF; font-size:14px; font-weight:bold; border-radius:8px; padding:12px 20px; text-decoration:none;">${escapeHtml(
           ofertaCtaLabel
         )}</a>
       </td></tr>`

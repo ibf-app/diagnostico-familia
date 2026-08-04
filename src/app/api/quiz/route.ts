@@ -75,7 +75,13 @@ export async function POST(request: Request) {
 
   if (resultado.status === "ENVIADO") {
     return NextResponse.json(
-      { leadId: lead.id, status: "ENVIADO", diagnostico: resultado.diagnostico, fase: resultado.fase },
+      {
+        leadId: lead.id,
+        status: "ENVIADO",
+        diagnostico: resultado.diagnostico,
+        fase: resultado.fase,
+        ofertaLink: resultado.ofertaLink,
+      },
       { status: 201 }
     );
   }

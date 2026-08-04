@@ -16,6 +16,7 @@ export async function enviarEmailDiagnostico(params: {
   email: string;
   fase: string;
   diagnostico: DiagnosticoIa;
+  ofertaLink: string | null;
 }): Promise<void> {
   const html = renderEmailDiagnostico(params);
 

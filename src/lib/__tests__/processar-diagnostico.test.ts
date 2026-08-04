@@ -70,12 +70,19 @@ describe("processarDiagnostico", () => {
 
     const resultado = await processarDiagnostico({ diagnosticoId: "diag-1", respostas, decisao });
 
-    expect(resultado).toEqual({ status: "ENVIADO", diagnostico: DIAGNOSTICO_IA, fase: decisao.fase });
+    const linkEsperado = "https://www.portalibf.org.br/nossos-programas/amor-matrimonial-1";
+    expect(resultado).toEqual({
+      status: "ENVIADO",
+      diagnostico: DIAGNOSTICO_IA,
+      fase: decisao.fase,
+      ofertaLink: linkEsperado,
+    });
     expect(enviarEmailDiagnosticoMock).toHaveBeenCalledWith({
       nome: respostas.nome,
       email: respostas.email,
       fase: decisao.fase,
       diagnostico: DIAGNOSTICO_IA,
+      ofertaLink: linkEsperado,
     });
 
     // 1a chamada marca GERADO com o conteúdo da IA, 2a marca ENVIADO.

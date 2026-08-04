@@ -5,6 +5,7 @@ interface TelaResultadoProps {
   nome: string;
   fase: string;
   diagnostico: DiagnosticoIa;
+  ofertaLink: string | null;
 }
 
 /**
@@ -38,9 +39,10 @@ function conteudoOferta(oferta: DiagnosticoIa["oferta"]): {
  * (ver src/lib/email-template.ts): abertura -> momento -> insights -> ações
  * práticas -> livro/filme (condicional) -> credibilidade IFFD -> oferta.
  */
-export default function TelaResultado({ nome, fase, diagnostico }: TelaResultadoProps) {
+export default function TelaResultado({ nome, fase, diagnostico, ofertaLink }: TelaResultadoProps) {
   const temLivroOuFilme = Boolean(diagnostico.recomendacao_livro || diagnostico.recomendacao_filme);
   const oferta = conteudoOferta(diagnostico.oferta);
+  const mostrarCta = oferta.mostrarCta && Boolean(ofertaLink);
 
   return (
     <div>
@@ -107,13 +109,8 @@ export default function TelaResultado({ nome, fase, diagnostico }: TelaResultado
       <div className={styles.oferta}>
         <div className={styles.ofertaEyebrow}>{oferta.eyebrow}</div>
         <p className={styles.ofertaTexto}>{diagnostico.oferta.texto}</p>
-        {oferta.mostrarCta && (
-          <a
-            className={styles.ofertaCta}
-            href="https://www.portalibf.org.br"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+        {mostrarCta && (
+          <a className={styles.ofertaCta} href={ofertaLink!} target="_blank" rel="noopener noreferrer">
             {oferta.ctaLabel}
           </a>
         )}
