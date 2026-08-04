@@ -112,3 +112,14 @@ export const COMO_CONHECEU_OPTIONS = [
   "Evento presencial",
   "Outro",
 ];
+
+/**
+ * PROVISÓRIO — proposta do time (2026-08-04), ainda pendente validação jurídica
+ * antes de ir pra produção. Prazo de retenção sugerido junto (24 meses a partir
+ * da resposta, ou até a pessoa pedir exclusão) ainda não está implementado como
+ * rotina automática — ver docs/quiz-perguntas.md.
+ */
+export const TEXTO_CONSENTIMENTO_LGPD =
+  "Autorizo o IBF a usar minhas respostas para gerar meu diagnóstico personalizado e a me contatar por " +
+  "e-mail (e WhatsApp, se eu informar) com esse conteúdo e outras novidades dos programas. Posso cancelar " +
+  "esse consentimento quando quiser. Li e concordo com a Política de Privacidade.";

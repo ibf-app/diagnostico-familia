@@ -26,11 +26,14 @@ const SYSTEM_PROMPT = `Você escreve o conteúdo de um e-mail de diagnóstico gr
 4. Tom: como um especialista que leu as respostas de verdade — nunca linguagem de
    robô, nunca clichê motivacional vazio.
 5. Escolha o livro e o filme APENAS da lista curada fornecida. Se a lista estiver
-   vazia, retorne titulo "" e explique em "porque" que a recomendação está pendente
-   — nunca invente um título.
+   vazia ou não tiver nada relevante, retorne null nesses dois campos — nunca
+   invente um título.
 6. Você NÃO decide fase nem programa recomendado — isso já vem fixado no input.
    Você só escreve o conteúdo em cima disso.
-7. Responda APENAS com um JSON válido no formato especificado, sem texto fora do JSON.`;
+7. Se a seção "REGRA DE SEGURANÇA ACIONADA" estiver presente no prompt, o e-mail
+   NUNCA menciona, oferece ou insinua qualquer programa do IBF — mesmo que exista
+   um programa recomendado no input. O bloco final é só apoio profissional.
+8. Responda APENAS com um JSON válido no formato especificado, sem texto fora do JSON.`;
 
 interface InputDiagnostico {
   respostas: RespostasQuiz;
@@ -40,13 +43,15 @@ interface InputDiagnostico {
 }
 
 function montarPrompt({ respostas, decisao, sinalDeAlertaEmocional }: InputDiagnostico): string {
-  const conteudoPrograma = lerConteudoPrograma(decisao.programaRecomendado);
+  // Quando o alerta dispara, nem passamos o conteúdo do programa pro modelo —
+  // menos chance dele "vazar" menção a programa por acidente (reforça a regra 7).
+  const conteudoPrograma = sinalDeAlertaEmocional ? null : lerConteudoPrograma(decisao.programaRecomendado);
   const livrosEFilmes = filtrarLivrosEFilmes(decisao.fase, respostas.maiorDesafio);
 
   const inputJson = {
     nome: respostas.nome,
     fase_atribuida: decisao.fase,
-    programa_recomendado: decisao.programaRecomendado,
+    programa_recomendado: sinalDeAlertaEmocional ? null : decisao.programaRecomendado,
     respostas: {
       estado_civil: respostas.estadoCivil,
       tem_filhos: respostas.temFilhos,
@@ -62,21 +67,26 @@ function montarPrompt({ respostas, decisao, sinalDeAlertaEmocional }: InputDiagn
     },
   };
 
-  const partes = [
-    `## Input\n\`\`\`json\n${JSON.stringify(inputJson, null, 2)}\n\`\`\``,
-    conteudoPrograma
-      ? `## Conteúdo oficial do programa recomendado\n${conteudoPrograma}`
-      : `## Sem programa recomendado — use o CTA genérico abaixo\n${lerCtaGenerico()}`,
-    `## Dados institucionais validados (só pode citar o que estiver aqui)\n${lerDadosIffd()}`,
-    `## Lista curada de livros/filmes (escolha só daqui)\n${JSON.stringify(livrosEFilmes, null, 2)}`,
-  ];
+  const partes = [`## Input\n\`\`\`json\n${JSON.stringify(inputJson, null, 2)}\n\`\`\``];
 
   if (sinalDeAlertaEmocional) {
     partes.push(
-      `## REGRA DE SEGURANÇA ACIONADA\nO campo "oferta" deve ter tipo "apoio_profissional" e usar ` +
-        `este texto-base (pode adaptar levemente ao contexto, sem perder o conteúdo):\n${lerAvisoSeguranca()}`
+      `## REGRA DE SEGURANÇA ACIONADA\nNão mencione, ofereça ou insinue nenhum programa do IBF neste ` +
+        `e-mail. O campo "oferta" deve ter tipo "apoio_profissional", programa_primario null, e o texto ` +
+        `deve se basear no seguinte (pode adaptar levemente ao contexto, sem perder o conteúdo):\n${lerAvisoSeguranca()}`
+    );
+  } else {
+    partes.push(
+      conteudoPrograma
+        ? `## Conteúdo oficial do programa recomendado\n${conteudoPrograma}`
+        : `## Sem programa recomendado — use o CTA genérico abaixo\n${lerCtaGenerico()}`
     );
   }
+
+  partes.push(
+    `## Dados institucionais validados (só pode citar o que estiver aqui)\n${lerDadosIffd()}`,
+    `## Lista curada de livros/filmes (escolha só daqui; se vazia, use null nos dois campos)\n${JSON.stringify(livrosEFilmes, null, 2)}`
+  );
 
   partes.push(
     `## Formato de saída esperado (JSON)\n\`\`\`json\n${JSON.stringify(
@@ -86,8 +96,8 @@ function montarPrompt({ respostas, decisao, sinalDeAlertaEmocional }: InputDiagn
         fase_titulo: "string (ecoa fase_atribuida)",
         insights: ["string", "string", "string"],
         acoes_praticas: ["string", "string", "string"],
-        recomendacao_livro: { titulo: "string", porque: "string" },
-        recomendacao_filme: { titulo: "string", porque: "string" },
+        recomendacao_livro: "{ titulo: string, porque: string } | null",
+        recomendacao_filme: "{ titulo: string, porque: string } | null",
         oferta: {
           tipo: "programa | conteudo_generico | apoio_profissional",
           programa_primario: "string | null",
@@ -116,5 +126,20 @@ export async function gerarDiagnosticoComIa(input: InputDiagnostico): Promise<Di
   }
 
   const json = JSON.parse(textBlock.text);
-  return diagnosticoIaSchema.parse(json);
+  const diagnostico = diagnosticoIaSchema.parse(json);
+
+  // Trava de segurança no código, não só no prompt: mesmo que o modelo ignore a
+  // instrução, o e-mail nunca vende programa quando o alerta emocional disparou.
+  if (input.sinalDeAlertaEmocional) {
+    return {
+      ...diagnostico,
+      oferta: {
+        tipo: "apoio_profissional",
+        programa_primario: null,
+        texto: diagnostico.oferta.texto,
+      },
+    };
+  }
+
+  return diagnostico;
 }

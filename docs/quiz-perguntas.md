@@ -25,3 +25,13 @@ incluindo a spec do prompt de IA e a árvore de decisão completa.
 
 Ver `src/lib/decision-tree.ts` para a árvore de decisão implementada e
 `src/types/quiz.ts` para os tipos de cada resposta.
+
+## LGPD (P10) — status em 2026-08-04
+
+- **Controlador dos dados:** Instituto Brasileiro da Família – IBF, CNPJ 46.586.700/0001-00.
+- **Texto do consentimento:** ver `TEXTO_CONSENTIMENTO_LGPD` em `src/lib/quiz-options.ts`
+  — **provisório**, pendente validação do jurídico do IBF antes de produção.
+- **Prazo de retenção proposto:** 24 meses a partir da resposta, ou até a pessoa
+  pedir exclusão (o que vier primeiro). **Ainda não implementado** como rotina
+  automática de expurgo — só a coleta do consentimento (`consentimentoLgpdEm`
+  em `Lead`) está no código hoje.

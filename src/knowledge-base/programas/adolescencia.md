@@ -3,7 +3,7 @@
 # Adolescência
 
 **Público:** Pais de filhos de 14 a 16 anos
-**Link oficial:** (link pendente, temas já confirmados no site)
+**Link oficial:** https://www.portalibf.org.br/nossos-programas/adolescencia
 
 ## O que essa fase envolve
 

@@ -3,7 +3,7 @@
 # Pré-adolescência
 
 **Público:** Pais de filhos de 11 a 13 anos
-**Link oficial:** (link pendente)
+**Link oficial:** https://www.portalibf.org.br/nossos-programas/pre-adolescencia
 
 ## O que essa fase envolve
 

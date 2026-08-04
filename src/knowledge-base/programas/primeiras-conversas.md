@@ -3,7 +3,7 @@
 # Primeiras Conversas
 
 **Público:** Pais de filhos de 4 a 5 anos
-**Link oficial:** (link pendente)
+**Link oficial:** https://www.portalibf.org.br/nossos-programas/primeiras-conversas
 
 ## O que essa fase envolve
 

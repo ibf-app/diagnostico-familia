@@ -46,6 +46,30 @@ export function renderEmailDiagnostico(params: {
         )}</div>`
       : `<div style="font-size:14px; line-height:1.6; color:#222222;">${escapeHtml(diagnostico.oferta.texto)}</div>`;
 
+  // Lista curada de livros/filmes ainda não existe (pendente do time), então a IA
+  // pode retornar null nos dois campos — nesse caso o bloco inteiro é omitido.
+  const linhasLivroFilme = [
+    diagnostico.recomendacao_livro &&
+      `<div style="font-size:14px; line-height:1.6; color:#444441; margin-bottom:8px;"><b>Livro:</b> ${escapeHtml(
+        diagnostico.recomendacao_livro.titulo
+      )} — ${escapeHtml(diagnostico.recomendacao_livro.porque)}</div>`,
+    diagnostico.recomendacao_filme &&
+      `<div style="font-size:14px; line-height:1.6; color:#444441;"><b>Filme:</b> ${escapeHtml(
+        diagnostico.recomendacao_filme.titulo
+      )} — ${escapeHtml(diagnostico.recomendacao_filme.porque)}</div>`,
+  ].filter(Boolean);
+
+  const blocoLivroFilmeHtml =
+    linhasLivroFilme.length === 0
+      ? ""
+      : `
+  <tr><td style="padding:4px 28px 8px;">
+    <div style="font-size:13px; font-weight:bold; color:#8A6D1F; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px;">Para aprofundar essa semana</div>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #E3E1D8; border-radius:8px;"><tr><td style="padding:14px 16px;">
+      ${linhasLivroFilme.join("\n")}
+    </td></tr></table>
+  </td></tr>`;
+
   return `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -92,17 +116,7 @@ export function renderEmailDiagnostico(params: {
     </table>
   </td></tr>
 
-  <tr><td style="padding:4px 28px 8px;">
-    <div style="font-size:13px; font-weight:bold; color:#8A6D1F; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px;">Para aprofundar essa semana</div>
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #E3E1D8; border-radius:8px;"><tr><td style="padding:14px 16px;">
-      <div style="font-size:14px; line-height:1.6; color:#444441; margin-bottom:8px;"><b>Livro:</b> ${escapeHtml(
-        diagnostico.recomendacao_livro.titulo
-      )} — ${escapeHtml(diagnostico.recomendacao_livro.porque)}</div>
-      <div style="font-size:14px; line-height:1.6; color:#444441;"><b>Filme:</b> ${escapeHtml(
-        diagnostico.recomendacao_filme.titulo
-      )} — ${escapeHtml(diagnostico.recomendacao_filme.porque)}</div>
-    </td></tr></table>
-  </td></tr>
+  ${blocoLivroFilmeHtml}
 
   <tr><td style="padding:20px 28px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>

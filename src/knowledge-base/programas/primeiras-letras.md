@@ -3,7 +3,7 @@
 # Primeiras Letras
 
 **Público:** Pais de filhos de 6 a 7 anos
-**Link oficial:** (link pendente)
+**Link oficial:** https://www.portalibf.org.br/nossos-programas/primeiras-letras
 
 ## O que essa fase envolve
 

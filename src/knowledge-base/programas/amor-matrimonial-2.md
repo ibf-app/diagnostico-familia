@@ -3,7 +3,7 @@
 # Amor Matrimonial 2
 
 **Público:** Casais com mais de 5 anos de união
-**Link oficial:** (link pendente)
+**Link oficial:** https://www.portalibf.org.br/nossos-programas/amor-matrimonial-2
 
 ## O que essa fase envolve
 
