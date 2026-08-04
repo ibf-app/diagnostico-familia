@@ -2,9 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { quizInputSchema } from "@/lib/quiz-input-schema";
 import { decidirFaseEPrograma } from "@/lib/decision-tree";
-import { sinalizaAlertaEmocional } from "@/lib/safety-check";
-import { gerarDiagnosticoComIa } from "@/lib/ai-diagnostic";
-import { enviarEmailDiagnostico } from "@/lib/mailer";
+import { processarDiagnostico } from "@/lib/processar-diagnostico";
 import type { RespostasQuiz } from "@/types/quiz";
 
 export async function POST(request: Request) {
@@ -73,45 +71,20 @@ export async function POST(request: Request) {
 
   const diagnosticoId = lead.diagnostico!.id;
 
-  try {
-    const sinalDeAlertaEmocional = sinalizaAlertaEmocional(respostas.relatoLivre);
-    const diagnosticoIa = await gerarDiagnosticoComIa({ respostas, decisao, sinalDeAlertaEmocional });
+  const resultado = await processarDiagnostico({ diagnosticoId, respostas, decisao });
 
-    await prisma.diagnostico.update({
-      where: { id: diagnosticoId },
-      data: {
-        status: "GERADO",
-        conteudoJson: diagnosticoIa,
-        tipoOferta: diagnosticoIa.oferta.tipo.toUpperCase() as "PROGRAMA" | "CONTEUDO_GENERICO" | "APOIO_PROFISSIONAL",
-      },
-    });
-
-    await enviarEmailDiagnostico({
-      nome: respostas.nome,
-      email: respostas.email,
-      fase: decisao.fase,
-      diagnostico: diagnosticoIa,
-    });
-
-    await prisma.diagnostico.update({
-      where: { id: diagnosticoId },
-      data: { status: "ENVIADO", enviadoEm: new Date() },
-    });
-
-    return NextResponse.json({ leadId: lead.id, status: "ENVIADO" }, { status: 201 });
-  } catch (err) {
-    const mensagem = err instanceof Error ? err.message : "Erro desconhecido ao gerar/enviar diagnóstico";
-    console.error(`[api/quiz] Falha ao gerar/enviar diagnóstico ${diagnosticoId}:`, err);
-    await prisma.diagnostico.update({
-      where: { id: diagnosticoId },
-      data: { status: "FALHOU", erro: mensagem, tentativas: { increment: 1 } },
-    });
-
-    // O lead já está salvo mesmo se IA/e-mail falharem — dá pra reprocessar depois
-    // a partir do status FALHOU, sem pedir pra pessoa preencher tudo de novo.
+  if (resultado.status === "ENVIADO") {
     return NextResponse.json(
-      { leadId: lead.id, status: "FALHOU", error: "Não foi possível gerar/enviar o diagnóstico agora." },
-      { status: 502 }
+      { leadId: lead.id, status: "ENVIADO", diagnostico: resultado.diagnostico, fase: resultado.fase },
+      { status: 201 }
     );
   }
+
+  // O lead já está salvo mesmo se IA/e-mail falharem — dá pra reprocessar depois
+  // a partir do status FALHOU (ver POST /api/cron/reprocessar-falhas), sem pedir
+  // pra pessoa preencher tudo de novo.
+  return NextResponse.json(
+    { leadId: lead.id, status: "FALHOU", error: "Não foi possível gerar/enviar o diagnóstico agora." },
+    { status: 502 }
+  );
 }

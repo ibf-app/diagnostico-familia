@@ -84,7 +84,7 @@ model Diagnostico {
   updatedAt DateTime @updatedAt
 
   leadId String @unique
-  lead   Lead   @relation(fields: [leadId], references: [id])
+  lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
 
   // decididos por regra determinística (lib/decision-tree.ts), nunca pela IA
   fase                String
