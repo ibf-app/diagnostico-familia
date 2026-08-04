@@ -1,8 +1,12 @@
 # Diagnóstico Família — quiz "Família em Foco" (IBF)
 
-Quiz de isca gratuito, por e-mail, que qualifica leads automaticamente e entrega
-um diagnóstico personalizado a partir de uma árvore de decisão determinística +
-geração de conteúdo por IA.
+Quiz de isca gratuito, por e-mail e tela, que qualifica leads automaticamente e
+entrega um diagnóstico personalizado a partir de uma árvore de decisão
+determinística + geração de conteúdo por IA.
+
+> **Novo no projeto?** Leia `docs/HISTORICO.md` primeiro — consolida as
+> decisões de arquitetura, os porquês, os bugs já corrigidos e as pendências
+> conhecidas. Este README é só o "como rodar".
 
 - **Stack:** Next.js (TypeScript), Prisma + Postgres (Railway), Anthropic (Claude)
   para o conteúdo do diagnóstico, Brevo para envio.
@@ -11,8 +15,9 @@ geração de conteúdo por IA.
   conteúdo em cima). Testada com os 3 casos de exemplo reais em
   `src/lib/__tests__/decision-tree.test.ts`.
 - **Knowledge base:** `src/knowledge-base/` — grounding fechado que a IA recebe
-  no prompt (apostilas dos programas, dados IFFD validados, lista curada de
-  livros/filmes). Hoje é tudo placeholder — ver `src/knowledge-base/README.md`.
+  no prompt. Apostilas dos 9 programas e dados IFFD já populados a partir do
+  material real do IBF; lista curada de livros/filmes ainda pendente — ver
+  `src/knowledge-base/README.md`.
 - **Perguntas do quiz:** ver `docs/quiz-perguntas.md` e `src/types/quiz.ts`.
 
 ## Getting Started
