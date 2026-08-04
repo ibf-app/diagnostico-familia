@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(railway status)",
+      "Bash(npm run build)",
+      "Bash(git fetch *)",
+      "Bash(railway variables)",
+      "Bash(railway logs)",
+      "Bash(railway environment)",
+      "Bash(npm run test)",
+      "Bash(npm run lint)",
+      "Bash(npm run dev)",
+      "Bash(git merge-base *)"
+    ]
+  }
+}
