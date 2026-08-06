@@ -97,6 +97,10 @@
   margin: 0 0 22px;
 }
 
+.question + .hint {
+  margin-top: -14px;
+}
+
 .optionList {
   display: flex;
   flex-direction: column;
@@ -125,6 +129,12 @@
   background: #113fa0;
   color: #ffffff;
   font-weight: bold;
+}
+
+.hint {
+  font-size: 13px;
+  color: #6b6862;
+  margin: 0 0 18px;
 }
 
 .chipList {

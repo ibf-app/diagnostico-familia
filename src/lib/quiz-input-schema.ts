@@ -23,7 +23,7 @@ export const quizInputSchema = z.object({
   cidade: z.string().max(120).optional(),
   comoConheceu: z.string().max(120).optional(),
   nome: z.string().min(1),
-  whatsapp: z.string().max(30).optional(),
+  whatsapp: z.string().min(1).max(30),
   email: z.string().email(),
   consentimentoLgpd: z.literal(true),
 });

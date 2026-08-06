@@ -167,6 +167,16 @@
   text-decoration: none;
 }
 
+.disclaimer {
+  background: #f4f1e9;
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #8a867a;
+  margin-bottom: 12px;
+}
+
 .avisoEmail {
   background: #f4f1e9;
   border-radius: 8px;

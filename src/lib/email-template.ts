@@ -164,6 +164,16 @@ export function renderEmailDiagnostico(params: {
     ${ofertaHtml}
   </td></tr>
 
+  <tr><td style="padding:0 28px 16px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F4F1E9; border-radius:8px;">
+      <tr><td style="padding:14px 16px; font-size:12px; line-height:1.6; color:#8A867A;">
+        Esse diagnóstico tem caráter educativo e reflexivo, a partir das suas respostas &mdash; não substitui
+        acompanhamento psicológico, terapêutico ou jurídico profissional. Se você estiver passando por uma
+        situação de risco ou crise, procure ajuda especializada.
+      </td></tr>
+    </table>
+  </td></tr>
+
   <tr><td style="background:#F4F1E9; padding:16px 28px; font-size:11px; line-height:1.6; color:#8A867A; border-radius:0 0 8px 8px;">
     IBF &middot; Instituto Brasileiro da Família. Você recebeu este diagnóstico porque respondeu ao quiz Família em Foco.<br>
     <a href="{{unsubscribe}}" style="color:#8A867A;">Cancelar inscrição</a> &middot; <a href="https://www.portalibf.org.br/politica-de-privacidade" style="color:#8A867A;">Política de privacidade</a>

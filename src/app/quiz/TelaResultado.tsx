@@ -116,6 +116,12 @@ export default function TelaResultado({ nome, fase, diagnostico, ofertaLink }: T
         )}
       </div>
 
+      <div className={styles.disclaimer}>
+        Esse diagnóstico tem caráter educativo e reflexivo, a partir das suas respostas — não substitui
+        acompanhamento psicológico, terapêutico ou jurídico profissional. Se você estiver passando por uma
+        situação de risco ou crise, procure ajuda especializada.
+      </div>
+
       <div className={styles.avisoEmail}>
         Esse mesmo diagnóstico também foi enviado para o seu e-mail. Se não encontrar em alguns minutos, dá uma
         olhada na caixa de spam ou promoções.

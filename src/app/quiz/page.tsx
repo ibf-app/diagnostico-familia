@@ -408,6 +408,7 @@ function SelecaoMultipla({ pergunta, opcoes, valoresAtuais, onContinuar, onVolta
   return (
     <div>
       <div className={styles.question}>{pergunta}</div>
+      <div className={styles.hint}>Selecione uma ou mais opções, se tiver mais de um filho.</div>
       <div className={styles.chipList}>
         {opcoes.map((opcao) => (
           <button
@@ -497,7 +498,7 @@ function formatarTelefone(valor: string): string {
 
 function telefoneValido(valor: string): boolean {
   const digitos = valor.replace(/\D/g, "");
-  return digitos.length === 0 || digitos.length === 10 || digitos.length === 11;
+  return digitos.length === 10 || digitos.length === 11;
 }
 
 interface FormularioFinalProps {
@@ -531,13 +532,16 @@ function FormularioFinal({ onEnviar, onVoltar, enviando, erro }: FormularioFinal
 
       <input
         className={styles.textInput}
-        placeholder="WhatsApp (opcional)"
+        placeholder="WhatsApp"
         inputMode="tel"
         value={whatsapp}
         onChange={(e) => setWhatsapp(formatarTelefone(e.target.value))}
         onBlur={() => setWhatsappTocado(true)}
       />
-      {whatsappTocado && !whatsappEhValido && (
+      {whatsappTocado && whatsapp.trim().length === 0 && (
+        <div className={styles.errorText}>WhatsApp é obrigatório.</div>
+      )}
+      {whatsappTocado && whatsapp.trim().length > 0 && !whatsappEhValido && (
         <div className={styles.errorText}>Confere o número — parece faltar ou sobrar dígito.</div>
       )}
 
@@ -569,7 +573,7 @@ function FormularioFinal({ onEnviar, onVoltar, enviando, erro }: FormularioFinal
           type="button"
           className={styles.primaryButton}
           disabled={!podeEnviar}
-          onClick={() => onEnviar({ nome: nome.trim(), whatsapp: whatsapp.trim() || undefined, email: email.trim() })}
+          onClick={() => onEnviar({ nome: nome.trim(), whatsapp: whatsapp.trim(), email: email.trim() })}
         >
           {enviando ? "Enviando..." : "Receber meu diagnóstico"}
         </button>
