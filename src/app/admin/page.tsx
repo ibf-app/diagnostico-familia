@@ -38,6 +38,10 @@ export default async function AdminPage({
 
   return (
     <div className={styles.page}>
+      <nav className={styles.nav}>
+        <span className={styles.navAtivo}>Leads</span>
+        <a href="/admin/relatorio">Relatório de perfis</a>
+      </nav>
       <div className={styles.header}>
         <h1 className={styles.titulo}>Leads · Família em Foco</h1>
         <div className={styles.subtitulo}>

@@ -9,8 +9,7 @@ import type { DiagnosticoIa } from "@/lib/ai-diagnostic-schema";
 
 // Precisa ser uma URL https absoluta e publicamente acessível — clientes de e-mail
 // não conseguem carregar imagem a partir de caminho relativo do projeto.
-// TODO: trocar pra domínio próprio (@portalibf.org.br) quando estiver definido.
-const APP_BASE_URL = process.env.APP_BASE_URL ?? "https://diagnostico-familia-production.up.railway.app";
+const APP_BASE_URL = process.env.APP_BASE_URL ?? "https://quiz.portalibf.org.br";
 const LOGO_URL = `${APP_BASE_URL}/logo_ibf.webp`;
 
 function escapeHtml(value: string): string {

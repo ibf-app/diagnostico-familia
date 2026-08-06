@@ -10,6 +10,29 @@
   margin-bottom: 20px;
 }
 
+.nav {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+  font-size: 13px;
+}
+
+.nav a {
+  color: #113fa0;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.nav a:hover {
+  text-decoration: underline;
+}
+
+.navAtivo {
+  color: #222222 !important;
+  text-decoration: none !important;
+  cursor: default;
+}
+
 .titulo {
   font-size: 22px;
   font-weight: 700;
