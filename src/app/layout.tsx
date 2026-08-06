@@ -12,10 +12,26 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const TITULO = "Família em Foco · IBF";
+const DESCRICAO =
+  "Diagnóstico gratuito e personalizado sobre o momento da sua família, feito pelo Instituto Brasileiro da Família (IBF).";
+
 export const metadata: Metadata = {
-  title: "Família em Foco · IBF",
-  description:
-    "Diagnóstico gratuito e personalizado sobre o momento da sua família, feito pelo Instituto Brasileiro da Família (IBF).",
+  metadataBase: new URL(process.env.APP_BASE_URL ?? "https://quiz.portalibf.org.br"),
+  title: TITULO,
+  description: DESCRICAO,
+  openGraph: {
+    title: TITULO,
+    description: DESCRICAO,
+    siteName: "IBF · Instituto Brasileiro da Família",
+    locale: "pt_BR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITULO,
+    description: DESCRICAO,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
