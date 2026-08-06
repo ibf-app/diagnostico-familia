@@ -5,9 +5,9 @@ import { renderEmailDiagnostico } from "@/lib/email-template";
 const brevo = new BrevoClient({ apiKey: process.env.BREVO_API_KEY ?? "" });
 
 // Precisa ser um remetente verificado na conta Brevo (Settings > Senders), senão o
-// envio falha. TODO: trocar pra um e-mail @portalibf.org.br assim que verificado.
+// envio falha.
 const REMETENTE = {
-  email: process.env.BREVO_SENDER_EMAIL ?? "send@edudebarros.com.br",
+  email: process.env.BREVO_SENDER_EMAIL ?? "quiz@portalibf.org.br",
   name: "IBF · Instituto Brasileiro da Família",
 };
 
