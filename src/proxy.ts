@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { NOME_COOKIE, tokenSessaoValido } from "@/lib/admin-session";
+import { SITE_URL } from "@/lib/site-url";
 
 /**
  * Protege /admin com sessão por cookie assinado (ver src/lib/admin-session.ts),
@@ -22,11 +23,11 @@ export function proxy(request: NextRequest) {
   if (pathname === "/admin/login") {
     // Já logado tentando ver a tela de login de novo: manda direto pro painel
     // em vez de mostrar o formulário sem propósito.
-    return autenticado ? NextResponse.redirect(new URL("/admin", request.url)) : NextResponse.next();
+    return autenticado ? NextResponse.redirect(new URL("/admin", SITE_URL)) : NextResponse.next();
   }
 
   if (!autenticado) {
-    const destino = new URL("/admin/login", request.url);
+    const destino = new URL("/admin/login", SITE_URL);
     destino.searchParams.set("redirect", pathname);
     return NextResponse.redirect(destino);
   }
