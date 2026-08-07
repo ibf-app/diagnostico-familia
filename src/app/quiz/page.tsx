@@ -4,6 +4,7 @@ import { useState } from "react";
 import styles from "./quiz.module.css";
 import TelaResultado from "./TelaResultado";
 import { proximoPasso, type StepId } from "@/lib/quiz-steps";
+import { pushDataLayerEvent } from "@/lib/gtm";
 import {
   COMO_CONHECEU_OPTIONS,
   TEXTO_CONSENTIMENTO_LGPD,
@@ -119,6 +120,11 @@ export default function QuizPage() {
       // IA) mesmo com o lead já salvo — o backend reprocessa automaticamente depois
       // (ver POST /api/cron/reprocessar-falhas), então aqui é uma confirmação, não erro.
       if (data.status === "PENDENTE") {
+        pushDataLayerEvent({
+          event: "quiz_completo",
+          lead_id: data.leadId,
+          status: "pendente",
+        });
         setPendente({ nome: camposFinais.nome ?? "" });
         return;
       }
@@ -126,6 +132,13 @@ export default function QuizPage() {
       if (data.status !== "ENVIADO" || !data.diagnostico) {
         throw new Error(data.error ?? "Não foi possível enviar o quiz agora.");
       }
+
+      pushDataLayerEvent({
+        event: "quiz_completo",
+        lead_id: data.leadId,
+        status: "enviado",
+        fase: data.fase,
+      });
 
       setResultado({
         nome: camposFinais.nome ?? "",
