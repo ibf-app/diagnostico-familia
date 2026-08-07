@@ -78,6 +78,7 @@ export default function QuizPage() {
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
   const [resultado, setResultado] = useState<Resultado | null>(null);
+  const [pendente, setPendente] = useState<{ nome: string } | null>(null);
 
   function avancar(atualizacao: Respostas) {
     const novasRespostas = { ...respostas, ...atualizacao };
@@ -110,7 +111,19 @@ export default function QuizPage() {
 
       const data = await res.json().catch(() => ({}));
 
-      if (!res.ok || data.status !== "ENVIADO" || !data.diagnostico) {
+      if (!res.ok) {
+        throw new Error(data.error ?? "Não foi possível enviar o quiz agora.");
+      }
+
+      // A IA/e-mail podem falhar por motivo transitório (ex.: instabilidade da API de
+      // IA) mesmo com o lead já salvo — o backend reprocessa automaticamente depois
+      // (ver POST /api/cron/reprocessar-falhas), então aqui é uma confirmação, não erro.
+      if (data.status === "PENDENTE") {
+        setPendente({ nome: camposFinais.nome ?? "" });
+        return;
+      }
+
+      if (data.status !== "ENVIADO" || !data.diagnostico) {
         throw new Error(data.error ?? "Não foi possível enviar o quiz agora.");
       }
 
@@ -145,6 +158,8 @@ export default function QuizPage() {
             diagnostico={resultado.diagnostico}
             ofertaLink={resultado.ofertaLink}
           />
+        ) : pendente ? (
+          <TelaPendente nome={pendente.nome} />
         ) : enviando ? (
           <TelaCarregando />
         ) : (
@@ -192,6 +207,22 @@ function TelaCarregando() {
       <div className={styles.spinner} />
       <div className={styles.loadingTitulo}>Estamos montando seu diagnóstico</div>
       <div className={styles.loadingTexto}>Isso pode levar até um minuto. Não fecha essa página, tá bom?</div>
+    </div>
+  );
+}
+
+/** Exibida quando a IA/e-mail não conseguiram terminar na hora (instabilidade
+ * pontual) — o lead já está salvo e o sistema tenta de novo automaticamente,
+ * então aqui é uma confirmação tranquilizadora, não uma tela de erro. */
+function TelaPendente({ nome }: { nome: string }) {
+  return (
+    <div className={styles.loadingWrap}>
+      <div className={styles.pendenteIcone}>✓</div>
+      <div className={styles.loadingTitulo}>Recebemos suas respostas{nome ? `, ${nome}` : ""}!</div>
+      <div className={styles.loadingTexto}>
+        Seu diagnóstico está sendo finalizado e chega no seu e-mail em poucos minutos. Se não aparecer, dá uma olhada
+        também na caixa de spam.
+      </div>
     </div>
   );
 }

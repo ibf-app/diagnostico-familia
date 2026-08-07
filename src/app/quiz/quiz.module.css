@@ -257,6 +257,19 @@
   }
 }
 
+.pendenteIcone {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #113fa0;
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .loadingTitulo {
   font-size: 19px;
   font-weight: 700;

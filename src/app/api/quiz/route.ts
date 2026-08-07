@@ -88,9 +88,8 @@ export async function POST(request: Request) {
 
   // O lead já está salvo mesmo se IA/e-mail falharem — dá pra reprocessar depois
   // a partir do status FALHOU (ver POST /api/cron/reprocessar-falhas), sem pedir
-  // pra pessoa preencher tudo de novo.
-  return NextResponse.json(
-    { leadId: lead.id, status: "FALHOU", error: "Não foi possível gerar/enviar o diagnóstico agora." },
-    { status: 502 }
-  );
+  // pra pessoa preencher tudo de novo. Por isso a resposta pro navegador não é um
+  // erro: a pessoa recebe uma confirmação de que o diagnóstico chega por e-mail,
+  // em vez de uma tela de falha por algo que o sistema já vai resolver sozinho.
+  return NextResponse.json({ leadId: lead.id, status: "PENDENTE" }, { status: 202 });
 }
