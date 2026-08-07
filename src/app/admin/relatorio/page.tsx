@@ -52,8 +52,15 @@ export default async function RelatorioPage() {
   return (
     <div className={styles.page}>
       <nav className={styles.nav}>
-        <a href="/admin">Leads</a>
-        <span className={styles.navAtivo}>Relatório de perfis</span>
+        <div className={styles.navLinks}>
+          <a href="/admin">Leads</a>
+          <span className={styles.navAtivo}>Relatório de perfis</span>
+        </div>
+        <form method="POST" action="/api/admin/logout">
+          <button type="submit" className={styles.navSairBotao}>
+            Sair
+          </button>
+        </form>
       </nav>
       <div className={styles.header}>
         <h1 className={styles.titulo}>Relatório de perfis · Família em Foco</h1>

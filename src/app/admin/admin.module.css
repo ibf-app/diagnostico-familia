@@ -12,9 +12,32 @@
 
 .nav {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 16px;
   margin-bottom: 12px;
   font-size: 13px;
+}
+
+.navLinks {
+  display: flex;
+  gap: 16px;
+}
+
+.navSairBotao {
+  padding: 0;
+  border: none;
+  background: none;
+  color: #6b6656;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.navSairBotao:hover {
+  color: #113fa0;
+  text-decoration: underline;
 }
 
 .nav a {

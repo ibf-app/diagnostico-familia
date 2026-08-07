@@ -39,8 +39,15 @@ export default async function AdminPage({
   return (
     <div className={styles.page}>
       <nav className={styles.nav}>
-        <span className={styles.navAtivo}>Leads</span>
-        <a href="/admin/relatorio">Relatório de perfis</a>
+        <div className={styles.navLinks}>
+          <span className={styles.navAtivo}>Leads</span>
+          <a href="/admin/relatorio">Relatório de perfis</a>
+        </div>
+        <form method="POST" action="/api/admin/logout">
+          <button type="submit" className={styles.navSairBotao}>
+            Sair
+          </button>
+        </form>
       </nav>
       <div className={styles.header}>
         <h1 className={styles.titulo}>Leads · Família em Foco</h1>
